@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Sesion
  *
- * @ORM\Table(name="sesion", indexes={@ORM\Index(name="fk_sesion_cliente_idx", columns={"cliente_id"}), @ORM\Index(name="fk_sesion_servicio1_idx", columns={"servicio_id"}), @ORM\Index(name="fk_sesion_usuario1_idx", columns={"usuario_id"})})
+ * @ORM\Table(name="sesion")
  * @ORM\Entity
  */
 class Sesion
@@ -59,14 +59,14 @@ class Sesion
     private $servicio;
 
     /**
-     * @var \AppBundle\Entity\Usuario
+     * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
      */
-    private $usuario;
+    private $user;
 
     /**
      * Set fecha
@@ -151,27 +151,27 @@ class Sesion
     }
 
     /**
-     * Set usuario
+     * Set user
      *
-     * @param \AppBundle\Entity\Usuario $usuario
+     * @param \AppBundle\Entity\User $user
      *
      * @return Sesion
      */
-    public function setUsuario(\AppBundle\Entity\Usuario $usuario = null)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->usuario = $usuario;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get usuario
+     * Get user
      *
-     * @return \AppBundle\Entity\Usuario
+     * @return \AppBundle\Entity\User
      */
-    public function getUsuario()
+    public function getUser()
     {
-        return $this->usuario;
+        return $this->user;
     }
 
     /**
