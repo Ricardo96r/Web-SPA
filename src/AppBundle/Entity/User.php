@@ -45,7 +45,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="json_array")
      */
-    private $roles = [];
+    private $roles;
 
     public function getId()
     {
@@ -94,7 +94,7 @@ class User implements UserInterface
 
         // guarantees that a user always has at least one role for security
         if (empty($roles)) {
-            $roles[] = 'ROLE_USER';
+            $roles[] = 'ROLE_ESPECIALISTA!';
         }
 
         return array_unique($roles);
