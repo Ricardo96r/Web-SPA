@@ -11,10 +11,8 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Post;
-use AppBundle\Form\Type\DateTimePickerType;
+use AppBundle\Entity\Cliente;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class PostType extends AbstractType
+class ClienteType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -42,23 +40,12 @@ class PostType extends AbstractType
         //     $builder->add('title', null, ['required' => false, ...]);
 
         $builder
-            ->add('title', null, [
-                'attr' => ['autofocus' => true],
-                'label' => 'label.title',
-            ])
-            ->add('summary', TextareaType::class, [
-                'label' => 'label.summary',
-            ])
-            ->add('content', null, [
-                'attr' => ['rows' => 20],
-                'label' => 'label.content',
-            ])
-            ->add('authorEmail', null, [
-                'label' => 'label.author_email',
-            ])
-            ->add('publishedAt', DateTimePickerType::class, [
-                'label' => 'label.published_at',
-            ])
+            ->add('nombre')
+            ->add('apellido')
+            ->add('cedula')
+            ->add('celular')
+            ->add('telefono')
+            ->add('email')
         ;
     }
 
@@ -68,7 +55,7 @@ class PostType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Post::class,
+            'data_class' => Cliente::class,
         ]);
     }
 }

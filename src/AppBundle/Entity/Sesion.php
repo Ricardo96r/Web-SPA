@@ -3,50 +3,68 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Sesion
  *
- * @ORM\Table(name="sesion")
+ * @ORM\Table(name="sesion", indexes={@ORM\Index(name="fk_sesion_user1_idx", columns={"manager_id"}), @ORM\Index(name="fk_sesion_servicio1_idx", columns={"servicio_id"}), @ORM\Index(name="fk_sesion_cliente1_idx", columns={"cliente_id"})})
  * @ORM\Entity
  */
 class Sesion
 {
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="creado", type="datetime", nullable=false)
+     */
+    private $creado;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="cambiado", type="datetime", nullable=false)
+     */
+    private $cambiado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="checkin", type="boolean", nullable=false)
+     */
+    private $checkin;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ejecutada", type="boolean", nullable=false)
+     */
+    private $ejecutada;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cancelada", type="boolean", nullable=false)
+     */
+    private $cancelada;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @Assert\DateTime()
-     */
-    private $fecha;
-
-    /**
-     * @ORM\Column(type="datetime", name="creado")
-     * @Assert\DateTime()
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime", name="cambiado")
-     * @Assert\DateTime()
-     */
-    private $updatedAt;
-
-    /**
-     * @var \AppBundle\Entity\Cliente
+     * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cliente")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cliente_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="manager_id", referencedColumnName="id")
      * })
      */
-    private $cliente;
+    private $manager;
 
     /**
      * @var \AppBundle\Entity\Servicio
@@ -59,37 +77,135 @@ class Sesion
     private $servicio;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \AppBundle\Entity\Cliente
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cliente")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="cliente_id", referencedColumnName="id")
      * })
      */
-    private $user;
+    private $cliente;
+
+
 
     /**
-     * Set fecha
+     * Set creado
      *
-     * @param \DateTime $fecha
+     * @param \DateTime $creado
      *
      * @return Sesion
      */
-    public function setFecha($fecha)
+    public function setCreado($creado)
     {
-        $this->fecha = $fecha;
+        $this->creado = $creado;
 
         return $this;
     }
 
     /**
-     * Get fecha
+     * Get creado
      *
      * @return \DateTime
      */
-    public function getFecha()
+    public function getCreado()
     {
-        return $this->fecha;
+        return $this->creado;
+    }
+
+    /**
+     * Set cambiado
+     *
+     * @param \DateTime $cambiado
+     *
+     * @return Sesion
+     */
+    public function setCambiado($cambiado)
+    {
+        $this->cambiado = $cambiado;
+
+        return $this;
+    }
+
+    /**
+     * Get cambiado
+     *
+     * @return \DateTime
+     */
+    public function getCambiado()
+    {
+        return $this->cambiado;
+    }
+
+    /**
+     * Set checkin
+     *
+     * @param boolean $checkin
+     *
+     * @return Sesion
+     */
+    public function setCheckin($checkin)
+    {
+        $this->checkin = $checkin;
+
+        return $this;
+    }
+
+    /**
+     * Get checkin
+     *
+     * @return boolean
+     */
+    public function getCheckin()
+    {
+        return $this->checkin;
+    }
+
+    /**
+     * Set ejecutada
+     *
+     * @param boolean $ejecutada
+     *
+     * @return Sesion
+     */
+    public function setEjecutada($ejecutada)
+    {
+        $this->ejecutada = $ejecutada;
+
+        return $this;
+    }
+
+    /**
+     * Get ejecutada
+     *
+     * @return boolean
+     */
+    public function getEjecutada()
+    {
+        return $this->ejecutada;
+    }
+
+    /**
+     * Set cancelada
+     *
+     * @param boolean $cancelada
+     *
+     * @return Sesion
+     */
+    public function setCancelada($cancelada)
+    {
+        $this->cancelada = $cancelada;
+
+        return $this;
+    }
+
+    /**
+     * Get cancelada
+     *
+     * @return boolean
+     */
+    public function getCancelada()
+    {
+        return $this->cancelada;
     }
 
     /**
@@ -103,27 +219,27 @@ class Sesion
     }
 
     /**
-     * Set cliente
+     * Set manager
      *
-     * @param \AppBundle\Entity\Cliente $cliente
+     * @param \AppBundle\Entity\User $manager
      *
      * @return Sesion
      */
-    public function setCliente(\AppBundle\Entity\Cliente $cliente = null)
+    public function setManager(\AppBundle\Entity\User $manager = null)
     {
-        $this->cliente = $cliente;
+        $this->manager = $manager;
 
         return $this;
     }
 
     /**
-     * Get cliente
+     * Get manager
      *
-     * @return \AppBundle\Entity\Cliente
+     * @return \AppBundle\Entity\User
      */
-    public function getCliente()
+    public function getManager()
     {
-        return $this->cliente;
+        return $this->manager;
     }
 
     /**
@@ -151,74 +267,26 @@ class Sesion
     }
 
     /**
-     * Set user
+     * Set cliente
      *
-     * @param \AppBundle\Entity\User $user
+     * @param \AppBundle\Entity\Cliente $cliente
      *
      * @return Sesion
      */
-    public function setUser(\AppBundle\Entity\User $user = null)
+    public function setCliente(\AppBundle\Entity\Cliente $cliente = null)
     {
-        $this->user = $user;
+        $this->cliente = $cliente;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get cliente
      *
-     * @return \AppBundle\Entity\User
+     * @return \AppBundle\Entity\Cliente
      */
-    public function getUser()
+    public function getCliente()
     {
-        return $this->user;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Sesion
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return Sesion
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
+        return $this->cliente;
     }
 }

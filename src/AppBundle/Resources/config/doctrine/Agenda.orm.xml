@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Agenda" table="agenda">
+    <indexes>
+      <index name="fk_agenda_sesion_idx" columns="sesion_id"/>
+      <index name="fk_agenda_user1_idx" columns="especialista_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="dia" type="date" column="dia" nullable="false"/>
+    <field name="horaInicio" type="time" column="hora_inicio" nullable="false"/>
+    <field name="horaFinal" type="time" column="hora_final" nullable="false"/>
+    <many-to-one field="sesion" target-entity="Sesion" fetch="LAZY">
+      <join-columns>
+        <join-column name="sesion_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="especialista" target-entity="User" fetch="LAZY">
+      <join-columns>
+        <join-column name="especialista_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

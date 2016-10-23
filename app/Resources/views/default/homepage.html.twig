@@ -1,22 +1,11 @@
-{% extends 'base.html.twig' %}
-
-{% block body_id 'homepage' %}
-
-{#
-    the homepage is a special page which displays neither a header nor a footer.
-    this is done with the 'trick' of defining empty Twig blocks without any content
-#}
-{% block header %}
-    {% include 'navbar.html.twig' %}
-{% endblock %}
-{% block footer %}{% endblock %}
+{% extends 'final.html.twig' %}
 
 {% block main %}
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <h4>Estas conectado al sistema con {{ app.user.username }}</h4>
-                <h5>Roles del usuario:</h5>
+                <h5>Roles que posee el usuario:</h5>
                 <ul>
                     {% if is_granted('ROLE_ADMIN') %}
                         <li>ROLE_ADMIN</li>

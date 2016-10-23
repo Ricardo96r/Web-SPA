@@ -1,0 +1,29 @@
+{% extends 'final.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert-success" role="alert">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h1 class="text-center">{{ cliente.nombre }} {{ cliente.apellido }}</h1>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Editar cliente</div>
+                <div class="panel-body">
+                    {{ form_start(edit_form) }}
+                    {{ form_widget(edit_form) }}
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Editar</button>
+                    </div>
+                    {{ form_end(edit_form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'final.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <!-- Boton nuevo cliente -->
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <a href="{{ path('cliente_create') }}">
+                                    <div class="btn btn-primary btn-lg btn-block">Nuevo cliente
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Buscar cliente -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Buscar cliente</div>
+                            <div class="panel-body">
+                                {{ form_start(form_buscar) }}
+                                {{ form_widget(form_buscar) }}
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-default">Buscar</button>
+                                </div>
+                                {{ form_end(form_buscar) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+
+                <!-- Tabla de clientes -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <th>Seleccionar</th>
+                        <th>Cedula</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        </thead>
+                        {% for cliente in clientes %}
+                            <tr>
+                                <td class="text-center"><a href="{{ path('cliente_show', { id: cliente.id }) }}"><span
+                                                class="glyphicon glyphicon-edit"
+                                                aria-hidden="true"></span></a></td>
+                                <td>{{ cliente.cedula }}</td>
+                                <td>{{ cliente.nombre }}</td>
+                                <td>{{ cliente.apellido }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

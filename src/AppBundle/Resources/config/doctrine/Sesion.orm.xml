@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Sesion" table="sesion">
+    <indexes>
+      <index name="fk_sesion_user1_idx" columns="manager_id"/>
+      <index name="fk_sesion_servicio1_idx" columns="servicio_id"/>
+      <index name="fk_sesion_cliente1_idx" columns="cliente_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="creado" type="datetime" column="creado" nullable="false"/>
+    <field name="cambiado" type="datetime" column="cambiado" nullable="false"/>
+    <field name="checkin" type="boolean" column="checkin" nullable="false"/>
+    <field name="ejecutada" type="boolean" column="ejecutada" nullable="false"/>
+    <field name="cancelada" type="boolean" column="cancelada" nullable="false"/>
+    <many-to-one field="manager" target-entity="User" fetch="LAZY">
+      <join-columns>
+        <join-column name="manager_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="servicio" target-entity="Servicio" fetch="LAZY">
+      <join-columns>
+        <join-column name="servicio_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="cliente" target-entity="Cliente" fetch="LAZY">
+      <join-columns>
+        <join-column name="cliente_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

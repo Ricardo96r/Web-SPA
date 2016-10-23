@@ -59,7 +59,10 @@ class AddUserCommand extends ContainerAwareCommand
             ->addArgument('username', InputArgument::OPTIONAL, 'The username of the new user')
             ->addArgument('password', InputArgument::OPTIONAL, 'The plain password of the new user')
             ->addArgument('email', InputArgument::OPTIONAL, 'The email of the new user')
-            ->addOption('is-admin', null, InputOption::VALUE_NONE, 'If set, the user is created as an administrator')
+            ->addArgument('nombre', InputArgument::OPTIONAL, 'Nombre')
+            ->addArgument('apellido', InputArgument::OPTIONAL, 'Apellido')
+            ->addArgument('telefono', InputArgument::OPTIONAL, 'telefono')
+            ->addArgument('activo', InputArgument::OPTIONAL, 'Este nuevo usuario estarà activo?')
         ;
     }
 
@@ -88,7 +91,7 @@ class AddUserCommand extends ContainerAwareCommand
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        if (null !== $input->getArgument('username') && null !== $input->getArgument('password') && null !== $input->getArgument('email')) {
+        if (null !== $input->getArgument('username') && null !== $input->getArgument('password') && null !== $input->getArgument('email') && null !== $input->getArgument('nombre') && null !== $input->getArgument('apellido') && null !== $input->getArgument('telefono') && null !== $input->getArgument('activo')) {
             return;
         }
 
@@ -161,6 +164,72 @@ class AddUserCommand extends ContainerAwareCommand
         } else {
             $output->writeln(' > <info>Email</info>: '.$email);
         }
+
+        $nombre = $input->getArgument('nombre');
+        if (null === $nombre) {
+            $question = new Question(' > <info>Nombre</info> (Primer nombre): ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new \RuntimeException('El nombre no puede quedar vacio!');
+                }
+
+                return $answer;
+            });
+            $question->setMaxAttempts(self::MAX_ATTEMPTS);
+
+            $nombre = $console->ask($input, $output, $question);
+            $input->setArgument('nombre', $nombre);
+        } else {
+            $output->writeln(' > <info>Nombre</info>: '.str_repeat('*', strlen($nombre)));
+        }
+
+        $apellido = $input->getArgument('apellido');
+        if (null === $apellido) {
+            $question = new Question(' > <info>Apellido</info> (Primer apellido): ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new \RuntimeException('El apellido no puede quedar vacio!');
+                }
+
+                return $answer;
+            });
+            $question->setMaxAttempts(self::MAX_ATTEMPTS);
+
+            $apellido = $console->ask($input, $output, $question);
+            $input->setArgument('apellido', $apellido);
+        } else {
+            $output->writeln(' > <info>Apellido</info>: '.str_repeat('*', strlen($apellido)));
+        }
+
+        $telefono = $input->getArgument('telefono');
+        if (null === $telefono) {
+            $question = new Question(' > <info>Telefono</info> (telefono): ');
+            $question->setValidator(function ($answer) {
+                if (empty($answer)) {
+                    throw new \RuntimeException('El telefono no puede quedar vacio!');
+                }
+
+                return $answer;
+            });
+            $question->setMaxAttempts(self::MAX_ATTEMPTS);
+
+            $telefono = $console->ask($input, $output, $question);
+            $input->setArgument('telefono', $telefono);
+        } else {
+            $output->writeln(' > <info>Telefono</info>: '.str_repeat('*', strlen($telefono)));
+        }
+
+        $activo = $input->getArgument('activo');
+        if (null === $activo) {
+            $question = new Question(' > <info>Activo</info> (0 = no/1 = si): ');
+
+            $question->setMaxAttempts(self::MAX_ATTEMPTS);
+
+            $activo = $console->ask($input, $output, $question);
+            $input->setArgument('activo', $activo);
+        } else {
+            $output->writeln(' > <info>Activo</info>: '.str_repeat('*', strlen($activo)));
+        }
     }
 
     /**
@@ -174,7 +243,10 @@ class AddUserCommand extends ContainerAwareCommand
         $username = $input->getArgument('username');
         $plainPassword = $input->getArgument('password');
         $email = $input->getArgument('email');
-        $isAdmin = $input->getOption('is-admin');
+        $nombre = $input->getArgument('nombre');
+        $apellido = $input->getArgument('apellido');
+        $telefono = $input->getArgument('telefono');
+        $activo = $input->getArgument('activo');
 
         // first check if a user with the same username already exists
         $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
@@ -187,7 +259,11 @@ class AddUserCommand extends ContainerAwareCommand
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
-        $user->setRoles([$isAdmin ? 'ROLE_ADMIN' : 'ROLE_ESPECIALISTA']);
+        $user->setNombre($nombre);
+        $user->setApellido($apellido);
+        $user->setTelefono($telefono);
+        $user->setActivo($activo);
+        $user->setRoles(['ROLE_ADMIN']);
 
         // See http://symfony.com/doc/current/book/security.html#security-encoding-password
         $encoder = $this->getContainer()->get('security.password_encoder');
@@ -198,7 +274,7 @@ class AddUserCommand extends ContainerAwareCommand
         $this->entityManager->flush();
 
         $output->writeln('');
-        $output->writeln(sprintf('[OK] %s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail()));
+        $output->writeln(sprintf('[OK] %s was successfully created: %s (%s)', 'Administrator user', $user->getUsername(), $user->getEmail()));
 
         if ($output->isVerbose()) {
             $finishTime = microtime(true);
