@@ -1,0 +1,29 @@
+{% extends 'final.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ver usuario</div>
+                <div class="panel-body">
+                    <p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellido }}</p>
+                    <p><strong>Username:</strong> {{ usuario.username }}</p>
+                    <p><strong>Telefono:</strong> {{ usuario.telefono }}</p>
+                    <p><strong>Email:</strong> {{ usuario.email }}</p>
+                    <p><strong>Rol:</strong> {{ usuario.roles[0] }}</p>
+                    <p><strong>Activo:</strong> {% if (usuario.activo) %} si {% else %} no {% endif %}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{{ path('usuario_edit', {id: usuario.id}) }}">
+                        <div class="btn btn-primary btn-lg btn-block">Editar usuario
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
