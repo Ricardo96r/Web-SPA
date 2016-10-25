@@ -23,7 +23,16 @@ class UsuarioController extends Controller
     public function indexAction(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:User');
-        $usuarios = $repository->findAll();
+
+        if ($this->isGranted('ROLE_MANAGER') && ! $this->isGranted('ROLE_ADMIN')) {
+            $query = $repository->createQueryBuilder('p')
+                ->where('p.roles = :rol')
+                ->setParameter('rol', '["ROLE_ESPECIALISTA"]')
+                ->getQuery();
+            $usuarios = $query->getResult();
+        } else {
+            $usuarios = $repository->findAll();
+        }
 
         return $this->render('usuario/index.html.twig', [
             'usuarios' => $usuarios,
@@ -34,18 +43,27 @@ class UsuarioController extends Controller
      *  Crea un nuevo Usuario
      *
      * @Route("/usuario/crear", name="usuario_create")
-     * @Security("is_granted('ROLE_MANAGER')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
      *
      */
     public function createAction(Request $request)
     {
         $usuario = new User();
-        $form = $this->createForm(UsuarioType::class, $usuario);
+        $form = $this->createForm(UsuarioType::class, $usuario, ['role' => $this->getUser()->getRoles()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            if ($this->isGranted('ROLE_MANAGER')) {
+                $usuario->setRoles(['ROLE_ESPECIALISTA']);
+            }
+
+            $encoder = $this->get('security.password_encoder');
+            $encodedPassword = $encoder->encodePassword($usuario, $usuario->getPassword());
+            $usuario->setPassword($encodedPassword);
+
             $entityManager->persist($usuario);
             $entityManager->flush();
 
@@ -77,13 +95,13 @@ class UsuarioController extends Controller
      *
      * @Route("/usuario/{id}/editar", name="usuario_edit")
      * @Method({"GET", "POST"})
-     * @Security("is_granted('ROLE_MANAGER')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @ParamConverter("usuario", options={"mapping": {"id" : "id"}})
      */
     public function editAction(User $usuario, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $editForm = $this->createForm(UsuarioType::class, $usuario);
+        $editForm = $this->createForm(UsuarioType::class, $usuario, ['role' => $this->getUser()->getRoles()]);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

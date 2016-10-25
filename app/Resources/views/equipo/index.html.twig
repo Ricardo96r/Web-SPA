@@ -12,46 +12,39 @@
                 <div class="row">
                     <div class="col-md-8">
                         {% if is_granted('ROLE_ADMIN') %}
-                            <h2>Administración de usuarios</h2>
+                            <h2>Administracion de equipo</h2>
                         {% else %}
-                            <h2>Administración de especialistas</h2>
+                            <h2>Ver equipos</h2>
                         {% endif %}
                     </div>
                     <div class="col-md-4">
                         {% if is_granted('ROLE_ADMIN') %}
-                            <!-- Boton nuevo usuario -->
+                            <!-- Boton nuevo equipo -->
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <a href="{{ path('usuario_create') }}">
-                                        <div class="btn btn-primary btn-lg btn-block">Nuevo usuario
+                                    <a href="{{ path('equipo_create') }}">
+                                        <div class="btn btn-primary btn-lg btn-block">Nuevo equipo
                                         </div>
                                     </a>
                                 </div>
                             </div>
-
                         {% endif %}
                     </div>
                 </div>
 
-                <!-- Tabla de usuarios -->
+                <!-- Tabla de equipos -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover table-striped">
                         <thead>
                         <th>Seleccionar</th>
-                        <th>Username</th>
                         <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Rol</th>
                         </thead>
-                        {% for usuario in usuarios %}
+                        {% for equipo in equipos %}
                             <tr>
-                                <td class="text-center"><a href="{{ path('usuario_show', { id: usuario.id }) }}"><span
+                                <td class="text-center"><a href="{{ path('equipo_show', { id: equipo.id }) }}"><span
                                                 class="glyphicon glyphicon-edit"
                                                 aria-hidden="true"></span></a></td>
-                                <td>{{ usuario.username }}</td>
-                                <td>{{ usuario.nombre }}</td>
-                                <td>{{ usuario.apellido }}</td>
-                                <td>{{ usuario.roles[0] }}</td>
+                                <td>{{ equipo.nombre }}</td>
                             </tr>
                         {% endfor %}
                     </table>

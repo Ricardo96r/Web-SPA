@@ -1,9 +1,91 @@
-{% extends 'base.html.twig' %}
+{% extends 'final.html.twig' %}
 
-{% block body %}
+{% block main %}
+    <div class="container">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-8">
+                        {% if is_granted('ROLE_MANAGER') %}
+                            <h2>Administracion de sesion/agenda</h2>
+                        {% else %}
+                            <h2>Ver agenda</h2>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        {% if is_granted('ROLE_MANAGER') %}
+                            <!-- Boton nuevo usuario -->
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <a href="{{ path('sesion_create') }}">
+                                        <div class="btn btn-primary btn-lg btn-block">Nueva sesion
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
 
-{% endblock %}
+                <!-- Tabla de sesion -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        {% if is_granted('ROLE_MANAGER') %}
+                            <th>Seleccionar</th>
+                            <th>Cliente</th>
+                            <th>Servicio</th>
+                            <th>Manager</th>
+                            <th>Agendado</th>
+                            </thead>
+                            {% for sesion in sesiones %}
+                                <tr>
+                                    <td class="text-center"><a href="{{ path('sesion_show', { id: sesion.id }) }}"><span
+                                                    class="glyphicon glyphicon-edit"
+                                                    aria-hidden="true"></span></a></td>
+                                    <td>{{ sesion.cliente.cedula }}
+                                        - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</td>
+                                    <td>{{ sesion.servicio.nombre }}</td>
+                                    <td>{{ sesion.manager.username }}
+                                        - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}</td>
+                                    <td>{% if (sesion.agenda) %} si {% else %} no {% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <th>Seleccionar</th>
+                            <th>Cliente</th>
+                            <th>Servicio</th>
+                            <th>Manager</th>
+                            <th>Dia</th>
+                            <th>Comienzo</th>
+                            <th>Fin</th>
+                            </thead>
+                            {% for sesion in sesiones %}
+                                <tr>
+                                    <td class="text-center"><a href="{{ path('sesion_show', { id: sesion.id }) }}"><span
+                                                    class="glyphicon glyphicon-edit"
+                                                    aria-hidden="true"></span></a></td>
+                                    <td>{{ sesion.cliente.cedula }}
+                                        - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</td>
+                                    <td>{{ sesion.servicio.nombre }}</td>
+                                    <td>{{ sesion.manager.username }}
+                                        - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}</td>
+                                    <td>{{ sesion.agenda.dia|date("m/d/Y") }}</td>
+                                    <td>{{ sesion.agenda.horaInicio|date("h:m:s") }}</td>
+                                    <td>{{ sesion.agenda.horaFinal|date("h:m:s") }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
 
-{% block stylesheets %}
 
+            </div>
+        </div>
+    </div>
 {% endblock %}

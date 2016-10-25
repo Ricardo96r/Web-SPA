@@ -1,0 +1,58 @@
+{% extends 'final.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        <div class="col-md-6 col-md-offset-3">
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ path('agenda_create', {id: sesion.id}) }}">
+                            <div class="btn btn-info btn-lg btn-block">Agendar sesion
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ver sesion</div>
+                <div class="panel-body">
+                    <p><strong>Cliente:</strong> {{ sesion.cliente.cedula }} - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</p>
+                    <p><strong>Servicio:</strong> {{ sesion.servicio.nombre }}</p>
+                    <p><strong>Manager:</strong> {{ sesion.manager.username }} - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}</p>
+                    <p><strong>Checkin:</strong> {% if (sesion.checkin) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Ejecutada:</strong> {% if (sesion.ejecutada) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Cancelada:</strong> {% if (sesion.cancelada) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Creado:</strong> {{ sesion.creado|date("m/d/Y")|date("m/d/Y h:m:s") }}</p>
+                    <p><strong>Editado:</strong> {{ sesion.cambiado|date("m/d/Y h:m:s") }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ path('sesion_edit', {id: sesion.id}) }}">
+                            <div class="btn btn-primary btn-lg btn-block">Editar sesion
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ path('sesion_edit', {id: sesion.id}) }}">
+                            <div class="btn btn-danger btn-lg btn-block">Borrar sesion
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

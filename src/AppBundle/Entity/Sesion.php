@@ -86,6 +86,14 @@ class Sesion
      */
     private $cliente;
 
+    /**
+     * @var \AppBundle\Entity\Agenda
+     *
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Agenda", mappedBy="sesion")
+     *
+     */
+    private $agenda;
+
 
 
     /**
@@ -240,6 +248,30 @@ class Sesion
     public function getManager()
     {
         return $this->manager;
+    }
+
+    /**
+     * Set agenda
+     *
+     * @param \AppBundle\Entity\Agenda $agenda
+     *
+     * @return Sesion
+     */
+    public function setAgenda(\AppBundle\Entity\Agenda $agenda = null)
+    {
+        $this->agenda = $agenda;
+
+        return $this;
+    }
+
+    /**
+     * Get agenda
+     *
+     * @return \AppBundle\Entity\Agenda
+     */
+    public function getAgenda()
+    {
+        return $this->agenda;
     }
 
     /**

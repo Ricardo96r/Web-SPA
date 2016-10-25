@@ -1,0 +1,27 @@
+{% extends 'final.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ver equipo</div>
+                <div class="panel-body">
+                    <p><strong>Nombre:</strong> {{ equipo.nombre }}</p>
+                    <p><strong>Descripcion:</strong> {{ equipo.descripcion }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            {% if is_granted('ROLE_ADMIN') %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{{ path('equipo_edit', {id: equipo.id}) }}">
+                        <div class="btn btn-primary btn-lg btn-block">Editar equipo
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

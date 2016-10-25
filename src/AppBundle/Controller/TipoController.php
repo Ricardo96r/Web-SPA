@@ -2,7 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Servicio;
+use AppBundle\Entity\Tipo;
+use AppBundle\Form\TipoType;
 use AppBundle\Form\ServicioType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
@@ -13,89 +14,89 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class ServicioController extends Controller
+class TipoController extends Controller
 {
     /**
-     * @Route("/servicio", name="servicio_index")
+     * @Route("/tipo", name="tipo_index")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_MANAGER')")
      */
     public function indexAction(Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Servicio');
-        $servicios = $repository->findAll();
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Tipo');
+        $tipos = $repository->findAll();
 
-        return $this->render('servicio/index.html.twig', [
-            'servicios' => $servicios,
+        return $this->render('tipo/index.html.twig', [
+            'tipos' => $tipos,
         ]);
     }
 
     /**
      *  Crea un nuevo Usuario
      *
-     * @Route("/servicio/crear", name="servicio_create")
+     * @Route("/tipo/crear", name="tipo_create")
      * @Security("is_granted('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
      *
      */
     public function createAction(Request $request)
     {
-        $servicio = new Servicio();
-        $form = $this->createForm(ServicioType::class, $servicio);
+        $tipo = new Tipo();
+        $form = $this->createForm(TipoType::class, $tipo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($servicio);
+            $entityManager->persist($tipo);
             $entityManager->flush();
 
-            $this->addFlash('success', 'El servicio '. $servicio->getNombre() .' se ha creado');
+            $this->addFlash('success', 'El tipo '. $tipo->getNombre() .' se ha creado');
 
-            return $this->redirectToRoute('servicio_index');
+            return $this->redirectToRoute('tipo_index');
         }
 
-        return $this->render('servicio/create.html.twig', [
-            'servicio' => $servicio,
+        return $this->render('tipo/create.html.twig', [
+            'tipo' => $tipo,
             'form' => $form->createView(),
         ]);
     }
 
 
     /**
-     * @Route("/servicio/{id}", name="servicio_show")
+     * @Route("/tipo/{id}", name="tipo_show")
      * @Security("is_granted('ROLE_MANAGER')")
      * @Method("GET")
-     * @ParamConverter("servicio", options={"mapping": {"id" : "id"}})
+     * @ParamConverter("tipo", options={"mapping": {"id" : "id"}})
      */
-    public function showAction(Servicio $servicio)
+    public function showAction(Tipo $tipo)
     {
-        return $this->render('servicio/show.html.twig', ['servicio' => $servicio]);
+        return $this->render('tipo/show.html.twig', ['tipo' => $tipo]);
     }
 
     /**
-     * Edita un servicio existente
+     * Edita un tipo existente
      *
-     * @Route("/servicio/{id}/editar", name="servicio_edit")
+     * @Route("/tipo/{id}/editar", name="tipo_edit")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_ADMIN')")
-     * @ParamConverter("servicio", options={"mapping": {"id" : "id"}})
+     * @ParamConverter("tipo", options={"mapping": {"id" : "id"}})
      */
-    public function editAction(Servicio $servicio, Request $request)
+    public function editAction(Tipo $tipo, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $editForm = $this->createForm(ServicioType::class, $servicio);
+        $editForm = $this->createForm(TipoType::class, $tipo);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $entityManager->flush();
 
-            $this->addFlash('success', 'Se ha editado correctamente el servicio');
+            $this->addFlash('success', 'Se ha editado correctamente el tipo');
 
-            return $this->redirectToRoute('servicio_edit', ['id' => $servicio->getId()]);
+            return $this->redirectToRoute('tipo_edit', ['id' => $tipo->getId()]);
         }
 
-        return $this->render('servicio/edit.html.twig', [
-            'servicio'        => $servicio,
+        return $this->render('tipo/edit.html.twig', [
+            'tipo'        => $tipo,
             'edit_form'   => $editForm->createView(),
         ]);
     }

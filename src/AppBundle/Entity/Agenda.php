@@ -45,10 +45,8 @@ class Agenda
     /**
      * @var \AppBundle\Entity\Sesion
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Sesion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sesion_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Sesion",  inversedBy="agenda")
+     * @ORM\JoinColumn(name="sesion_id", referencedColumnName="id")
      */
     private $sesion;
 

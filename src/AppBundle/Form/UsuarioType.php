@@ -11,14 +11,12 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Cliente;
 use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use AppBundle\Form\DataTransformer\StringToArrayTransformer;
 
 /**
  * Defines the form used to create and manipulate blog posts.
@@ -33,29 +31,33 @@ class UsuarioType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $user = new User();
         $builder
+            ->add('username')
             ->add('nombre')
+            ->add('password')
             ->add('apellido')
             ->add('telefono')
             ->add('email')
-            ->add('activo')
-            ->add('roles', ChoiceType::class, array(
-                'choices' => array(
-                    'ROLE_ESPECIALISTA' => 'ROLE_ESPECIALISTA',
-                    'ROLE_MANAGER' => 'ROLE_MANAGER',
-                    'ROLE_ADMIN' => 'ROLE_ADMIN',
-                ),
-            ))->addModelTransformer(new CallbackTransformer(
-                function ($user) {
-                    return $user->setRoles($user->getRoles()[0]);
-                },
-                function ($user) {
-                    // transform the string back to an array
-                    return $user->setRoles([$user->getRoles()]);
-                }
-            ))
-        ;
+            ->add('activo');
+
+        if (in_array('ROLE_ADMIN', $options['role'])) {
+            $builder
+                ->add('roles', ChoiceType::class, array(
+                    'choices' => array(
+                        'ROLE_ESPECIALISTA' => 'ROLE_ESPECIALISTA',
+                        'ROLE_MANAGER' => 'ROLE_MANAGER',
+                        'ROLE_ADMIN' => 'ROLE_ADMIN',
+                    ),
+                ))->addModelTransformer(new CallbackTransformer(
+                    function ($user) {
+                        return $user->setRoles($user->getRoles()[0]);
+                    },
+                    function ($user) {
+                        // transform the string back to an array
+                        return $user->setRoles([$user->getRoles()]);
+                    }
+                ));
+        }
     }
 
     /**
@@ -65,6 +67,7 @@ class UsuarioType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'role' => ['ROLE_MANAGER']
         ]);
     }
 }
