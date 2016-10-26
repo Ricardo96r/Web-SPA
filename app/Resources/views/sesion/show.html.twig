@@ -7,7 +7,120 @@
                 {{ flash_message }}
             </div>
         {% endfor %}
-        <div class="col-md-6 col-md-offset-3">
+        {% for flash_message in app.session.flashBag.get('info') %}
+            <div class="alert alert-info" role="alert">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ver sesion</div>
+                <div class="panel-body">
+                    <p><strong>Cliente:</strong>
+                        <a href="{{ path('cliente_show', {id: sesion.cliente.id}) }}">
+                            {{ sesion.cliente.cedula }}
+                            - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}
+                        </a>
+                    </p>
+                    <p><strong>Servicio:</strong>
+                        <a href="{{ path('servicio_show', {id: sesion.servicio.id}) }}">{{ sesion.servicio.nombre }}</a>
+                    </p>
+                    <p><strong>Manager:</strong>
+                        <a href="{{ path('usuario_show', {id: sesion.manager.id}) }}">
+                            {{ sesion.manager.username }}
+                            - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}
+                        </a>
+                    </p>
+                    {% if sesion.agenda == null %}
+                        <p><strong>Agenda:</strong> Sin agendar</p>
+                    {% endif %}
+                    <p><strong>Checkin:</strong> {% if (sesion.checkin) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Ejecutada:</strong> {% if (sesion.ejecutada) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Cancelada:</strong> {% if (sesion.cancelada) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Sesion creada:</strong> {{ sesion.creado|date("m/d/Y h:i:s a", false) }}</p>
+                    <p><strong>Sesion editada:</strong> {{ sesion.cambiado|date("m/d/Y h:i:s a", false) }}</p>
+                    {% if is_granted('ROLE_ESPECIALISTA') %}
+                        <div class="form-group">
+                            <a href="{{ path('sesion_edit', {id: sesion.id}) }}">
+                                {% if is_granted('ROLE_MANAGER') %}
+                                    <div class="btn btn-primary btn-lg btn-block">Editar sesion</div>
+                                {% else %}
+                                    {% if (sesion.agenda) %}
+                                        <div class="btn btn-primary btn-lg btn-block">Check-in</div>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </div>
+
+                    {% endif %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if  (not sesion.agenda) and (not sesion.cancelada) %}
+                            <div class="form-group">
+                                <div class="btn btn-danger btn-lg btn-block" data-toggle="modal"
+                                     data-target="#myModal">
+                                    Borrar sesion
+                                </div>
+                            </div>
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">¿Seguro que quieres borrar la
+                                                sesión?</h4>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <a href="{{ path('sesion_delete', {id: sesion.id}) }}">
+                                                <button type="button" class="btn btn-danger">Borrar sesión</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info" role="alert">
+                                <strong>NOTA:</strong> No se puede borrar esta sesión, ya que la sesión esta agendada o
+                                ha
+                                sido cancelada
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Ver servicio</div>
+                <div class="panel-body">
+                    <p><strong>Nombre:</strong> {{ sesion.servicio.nombre }}</p>
+                    <p><strong>Descripcion:</strong> {{ sesion.servicio.descripcion }}</p>
+                    <p><strong>Duracion:</strong> {{ sesion.servicio.duracion }}</p>
+                    <p><strong>Precio:</strong> {{ sesion.servicio.precio }}</p>
+                    <p><strong>Tipo:</strong> <a
+                                href="{{ path('tipo_show', {id: sesion.servicio.tipo.id}) }}">{{ sesion.servicio.tipo.nombre }}</a>
+                    </p>
+                    <p><strong>Activo:</strong> {% if (sesion.servicio.activo) %} si {% else %} no {% endif %}</p>
+                    <p><strong>Equipo:</strong></p>
+                    <ul>
+                        {% for equipo in sesion.servicio.equipo %}
+                            <a href="{{ path('equipo_show', {id: equipo.id}) }}">
+                                <li>{{ equipo.nombre }}</li>
+                            </a>
+                        {% endfor %}
+                    </ul>
+                    <div class="form-group">
+                        <a href="{{ path('servicio_show', {id: sesion.servicio.id}) }}">
+                            <div class="btn btn-default btn-lg btn-block">Ver servicio</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
             {% if sesion.agenda == null %}
                 {% if is_granted('ROLE_MANAGER') %}
                     <div class="panel panel-default">
@@ -19,67 +132,96 @@
                         </div>
                     </div>
                 {% endif %}
+            {% else %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Ver agenda</div>
+                    <div class="panel-body">
+                        <p><strong>Especialista:</strong>
+                            <a href="{{ path('usuario_show', {id: sesion.agenda.especialista.id}) }}">
+                                {{ sesion.agenda.especialista.username }}
+                                - {{ sesion.agenda.especialista.nombre }} {{ sesion.agenda.especialista.apellido }}
+                            </a>
+                        </p>
+                        <p><strong>Dia:</strong> {{ sesion.agenda.dia|date("m/d/Y", false) }}</p>
+                        <p><strong>Hora de comienzo:</strong> {{ sesion.agenda.horaInicio|date("h:i:s a", false) }}
+                        </p>
+                        <p><strong>Hora de terminar:</strong> {{ sesion.agenda.horaFinal|date("h:i:s a", false) }}
+                        </p>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            {% if sesion.agenda != null %}
+                                <div class="form-group">
+                                    <a href="{{ path('agenda_edit', {id: sesion.id}) }}">
+                                        <div class="btn btn-primary btn-lg btn-block">Editar agenda
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-danger btn-lg btn-block" data-toggle="modal"
+                                         data-target="#myModalAgenda">
+                                        Borrar agenda
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="myModalAgenda" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                            aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">¿Seguro que quieres borrar la
+                                                    agenda?</h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                                </button>
+                                                <a href="{{ path('agenda_delete', {id: sesion.id}) }}">
+                                                    <button type="button" class="btn btn-danger">Borrar agenda</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
             {% endif %}
-        </div>
-        <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
-                <div class="panel-heading">Ver sesion</div>
+                <div class="panel-heading">Ver cliente</div>
                 <div class="panel-body">
-                    <p><strong>Cliente:</strong> {{ sesion.cliente.cedula }}
-                        - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</p>
-                    <p><strong>Servicio:</strong> {{ sesion.servicio.nombre }}</p>
-                    <p><strong>Manager:</strong> {{ sesion.manager.username }}
-                        - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}</p>
-                    {% if sesion.agenda != null %}
-                        <p><strong>Especialista:</strong> {{ sesion.agenda.especialista.username }}
-                            - {{ sesion.agenda.especialista.nombre }} {{ sesion.agenda.especialista.apellido }}</p>
-                        <p><strong>Dia:</strong> {{ sesion.agenda.dia|date("m/d/Y") }}</p>
-                        <p><strong>Hora de comienzo:</strong> {{ sesion.agenda.horaInicio|date("h:m:s") }}</p>
-                        <p><strong>Hora de terminar:</strong> {{ sesion.agenda.horaFinal|date("h:m:s") }}</p>
-                    {% else %}
-                        <p><strong>Agenda:</strong> Sin agendar</p>
-                    {% endif %}
-                    <p><strong>Checkin:</strong> {% if (sesion.checkin) %} si {% else %} no {% endif %}</p>
-                    <p><strong>Ejecutada:</strong> {% if (sesion.ejecutada) %} si {% else %} no {% endif %}</p>
-                    <p><strong>Cancelada:</strong> {% if (sesion.cancelada) %} si {% else %} no {% endif %}</p>
-                    <p><strong>Sesion creada:</strong> {{ sesion.creado|date("m/d/Y h:m:s") }}</p>
-                    <p><strong>Sesion editada:</strong> {{ sesion.cambiado|date("m/d/Y h:m:s") }}</p>
+                    <p><strong>Nombre:</strong> {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</p>
+                    <p><strong>Cedula:</strong> {{ sesion.cliente.cedula }}</p>
+                    <p><strong>Celular:</strong> {{ sesion.cliente.celular }}</p>
+                    <p><strong>Telefono:</strong> {{ sesion.cliente.telefono }}</p>
+                    <p><strong>Email:</strong> {{ sesion.cliente.email }}</p>
+                    <div class="form-group">
+                        <a href="{{ path('cliente_show', {id: sesion.cliente.id}) }}">
+                            <div class="btn btn-default btn-lg btn-block">Ver cliente</div>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-md-offset-3">
-            {% if is_granted('ROLE_ESPECIALISTA') %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <a href="{{ path('sesion_edit', {id: sesion.id}) }}">
-                            {% if is_granted('ROLE_MANAGER') %}
-                                <div class="btn btn-primary btn-lg btn-block">Editar sesion</div>
-                            {% else %}
-                                <div class="btn btn-primary btn-lg btn-block">Check-in</div>
-                            {% endif %}
+            {% if sesion.agenda != null %}
+            <div class="panel panel-default">
+                <div class="panel-heading">Ver especialista</div>
+                <div class="panel-body">
+                    <p>
+                        <strong>Nombre:</strong> {{ sesion.agenda.especialista.nombre }} {{ sesion.agenda.especialista.apellido }}
+                    </p>
+                    <p><strong>Username:</strong> {{ sesion.agenda.especialista.username }}</p>
+                    <p><strong>Telefono:</strong> {{ sesion.agenda.especialista.telefono }}</p>
+                    <p><strong>Email:</strong> {{ sesion.agenda.especialista.email }}</p>
+                    <p>
+                        <strong>Activo:</strong> {% if (sesion.agenda.especialista.activo) %} si {% else %} no {% endif %}
+                    </p>
+                    <div class="form-group">
+                        <a href="{{ path('cliente_show', {id: sesion.agenda.especialista.id}) }}">
+                            <div class="btn btn-default btn-lg btn-block">Ver especialista</div>
                         </a>
                     </div>
                 </div>
-            {% endif %}
-            {% if is_granted('ROLE_ADMIN') %}
-                {% if sesion.agenda != null %}
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <a href="{{ path('agenda_edit', {id: sesion.id}) }}">
-                                <div class="btn btn-info btn-lg btn-block">Editar agenda
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                {% endif %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <a href="{{ path('sesion_edit', {id: sesion.id}) }}">
-                            <div class="btn btn-danger btn-lg btn-block">Borrar sesion
-                            </div>
-                        </a>
-                    </div>
-                </div>
+            </div>
             {% endif %}
         </div>
     </div>

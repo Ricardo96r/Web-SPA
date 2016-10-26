@@ -10,12 +10,14 @@
                     <p><strong>Descripcion:</strong> {{ servicio.descripcion }}</p>
                     <p><strong>Duracion:</strong> {{ servicio.duracion }}</p>
                     <p><strong>Precio:</strong> {{ servicio.precio }}</p>
-                    <p><strong>Tipo:</strong> {{ servicio.tipo.nombre }}</p>
+                    <p><strong>Tipo:</strong> <a href="{{ path('tipo_show', {id: servicio.tipo.id}) }}">{{ servicio.tipo.nombre }}</a></p>
                     <p><strong>Activo:</strong> {% if (servicio.activo) %} si {% else %} no {% endif %}</p>
                     <p><strong>Equipo:</strong></p>
                     <ul>
                         {% for equipo in servicio.equipo %}
-                            <li>{{ equipo.nombre }}</li>
+                            <a href="{{ path('equipo_show', {id: equipo.id}) }}">
+                                <li>{{ equipo.nombre }}</li>
+                            </a>
                         {% endfor %}
                     </ul>
                 </div>

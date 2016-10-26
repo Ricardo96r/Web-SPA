@@ -48,27 +48,29 @@ class SesionType extends AbstractType
                             ->setParameter('roleManager', '["ROLE_MANAGER"]')
                             ->setParameter('roleAdmin', '["ROLE_ADMIN"]');
                     },
-                ))
-                ->add('servicio', EntityType::class, array(
+                ));
+            if ( ! $options['agenda']) {
+                $builder->add('servicio', EntityType::class, array(
                     'class' => 'AppBundle:Servicio',
                     'choice_label' => 'nombre',
-                ))
-                ->add('cliente', EntityType::class, array(
-                    'class' => 'AppBundle:Cliente',
-                    'choice_value' => 'cedula',
-                    'choice_label' => function ($cliente) {
-                        return $cliente->getNombre() . ' ' . $cliente->getApellido() . ' - ' . $cliente->getCedula();
-                    }
-                ))
-                ->add('creado')
-                ->add('cambiado');
+                ));
+            }
+            $builder->add('cliente', EntityType::class, array(
+                'class' => 'AppBundle:Cliente',
+                'choice_value' => 'cedula',
+                'choice_label' => function ($cliente) {
+                    return $cliente->getNombre() . ' ' . $cliente->getApellido() . ' - ' . $cliente->getCedula();
+                }
+            ));
         }
-        if (in_array('ROLE_ESPECIALISTA', $options['role']) || ($options['tipo'] == 'crear')) {
+        if ((in_array('ROLE_ESPECIALISTA', $options['role']) || in_array('ROLE_MANAGER', $options['role']) || in_array('ROLE_ADMIN', $options['role'])) && ($options['tipo'] != 'crear')) {
             $builder->add('checkin');
         }
-        if (in_array('ROLE_MANAGER', $options['role']) || ($options['tipo'] == 'crear')) {
-            $builder->add('ejecutada')
-                ->add('cancelada');
+        if ((in_array('ROLE_MANAGER', $options['role']) || in_array('ROLE_ADMIN', $options['role'])) && ($options['tipo'] != 'crear')) {
+            $builder->add('ejecutada');
+        }
+        if (in_array('ROLE_MANAGER', $options['role']) || in_array('ROLE_ADMIN', $options['role']) || ($options['tipo'] == 'crear')) {
+            $builder->add('cancelada');
         }
     }
 
@@ -80,6 +82,7 @@ class SesionType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Sesion::class,
             'role' => ['ROLE_ESPECIALISTA'],
+            'agenda' => false,
             'tipo' => ''
         ]);
     }

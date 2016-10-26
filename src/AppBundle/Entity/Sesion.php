@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Events;
 
 /**
  * Sesion
  *
  * @ORM\Table(name="sesion", indexes={@ORM\Index(name="fk_sesion_user1_idx", columns={"manager_id"}), @ORM\Index(name="fk_sesion_servicio1_idx", columns={"servicio_id"}), @ORM\Index(name="fk_sesion_cliente1_idx", columns={"cliente_id"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Sesion
 {
@@ -31,14 +33,14 @@ class Sesion
      *
      * @ORM\Column(name="checkin", type="boolean", nullable=false)
      */
-    private $checkin;
+    private $checkin = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="ejecutada", type="boolean", nullable=false)
      */
-    private $ejecutada;
+    private $ejecutada = false;
 
     /**
      * @var boolean
@@ -94,7 +96,18 @@ class Sesion
      */
     private $agenda;
 
+    /** @ORM\PrePersist */
+    public function timestampPrePersist()
+    {
+        $this->setCambiado(new \DateTime(date('Y-m-d H:i:s')));
+        $this->setCreado(new \DateTime(date('Y-m-d H:i:s')));
+    }
 
+    /** @ORM\PreUpdate */
+    public function timestampPreUpdate()
+    {
+        $this->setCambiado(new \DateTime(date('Y-m-d H:i:s')));
+    }
 
     /**
      * Set creado

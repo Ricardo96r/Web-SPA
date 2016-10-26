@@ -15,7 +15,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="{{ path('homepage') }}">Sesiones/Agendas</a></li>
+                <li><a href="{{ path('homepage') }}">Sesiones</a></li>
                 {% if is_granted('ROLE_MANAGER') %}
                     <li><a href="{{ path('cliente_index') }}">Clientes</a></li>
                     <li><a href="{{ path('usuario_index') }}">Usuarios</a></li>
@@ -30,9 +30,7 @@
                        aria-expanded="false">{{ app.user.nombre }} {{ app.user.apellido }}<span
                                 class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
+                        <li><a href="{{ path('usuario_show', { id: app.user.id }) }}">Ver usuario</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{{ path('security_logout') }}" class="label-danger" style="color: white;">Salir del
                                 sistema</a></li>

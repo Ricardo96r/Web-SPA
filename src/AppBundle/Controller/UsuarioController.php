@@ -81,7 +81,7 @@ class UsuarioController extends Controller
 
     /**
      * @Route("/usuario/{id}", name="usuario_show")
-     * @Security("is_granted('ROLE_MANAGER')")
+     * @Security("is_granted('ROLE_ESPECIALISTA')")
      * @Method("GET")
      * @ParamConverter("usuario", options={"mapping": {"id" : "id"}})
      */

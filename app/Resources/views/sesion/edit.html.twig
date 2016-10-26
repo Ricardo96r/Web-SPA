@@ -8,6 +8,18 @@
                     {{ flash_message }}
                 </div>
             {% endfor %}
+            {% for flash_message in app.session.flashBag.get('info') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
+            {% if is_granted('ROLE_ADMIN') %}
+                {% if sesion.agenda %}
+                    <div class="alert alert-info" role="alert">
+                        <strong>NOTA:</strong> No se puede cambiar el servicio, ya que la sesión esta agendada
+                    </div>
+                {% endif %}
+            {% endif %}
             <div class="panel panel-default">
                 <div class="panel-heading">Editar sesion</div>
                 <div class="panel-body">

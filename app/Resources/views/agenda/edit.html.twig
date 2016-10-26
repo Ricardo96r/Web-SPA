@@ -8,6 +8,11 @@
                     {{ flash_message }}
                 </div>
             {% endfor %}
+            {% for flash_message in app.session.flashBag.get('info') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
             <div class="panel panel-default">
                 <div class="panel-heading">Editar agenda</div>
                 <div class="panel-body">

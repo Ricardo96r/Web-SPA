@@ -30,7 +30,7 @@ class AgendaController extends Controller
         $form = $this->createForm(AgendaType::class, $agenda);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $this->validarDiaHoraInicioHoraFinalEspecialista($agenda)) {
             $agenda->setSesion($sesion);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($agenda);
@@ -53,7 +53,7 @@ class AgendaController extends Controller
      * @Route("/agenda/{id}/editar", name="agenda_edit")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_MANAGER')")
-     * @ParamConverter("agenda", options={"mapping": {"id" : "id"}})
+     * @ParamConverter("agenda", class="AppBundle:Agenda", options={"mapping": {"id" : "sesion"}})
      */
     public function editAction(Agenda $agenda, Request $request)
     {
@@ -61,18 +61,80 @@ class AgendaController extends Controller
         $editForm = $this->createForm(AgendaType::class, $agenda);
         $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($editForm->isSubmitted() && $editForm->isValid() && $this->validarDiaHoraInicioHoraFinalEspecialista($agenda)) {
             $entityManager->flush();
 
             $this->addFlash('success', 'Se ha editado correctamente la agenda');
 
-            return $this->redirectToRoute('sesion_show', ['id' => $agenda->getId()]);
+            return $this->redirectToRoute('sesion_show', ['id' => $agenda->getSesion()->getId()]);
         }
 
         return $this->render('agenda/edit.html.twig', [
-            'agenda'        => $agenda,
-            'edit_form'   => $editForm->createView(),
+            'agenda' => $agenda,
+            'edit_form' => $editForm->createView(),
         ]);
+    }
+
+    /**
+     * Edita un sesion existente
+     *
+     * @Route("/agenda/{id}/borrar", name="agenda_delete")
+     * @Method("GET")
+     * @Security("is_granted('ROLE_ADMIN')")
+     * @ParamConverter("agenda", class="AppBundle:Agenda", options={"mapping": {"id" : "sesion"}})
+     */
+    public function deleteAction(Agenda $agenda, Request $request)
+    {
+        $id = $agenda->getId();
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($agenda);
+        $entityManager->flush();
+        $this->addFlash('success', 'Se ha borrado correctamente la agenda de la sesión');
+        return $this->redirectToRoute('sesion_show', ['id' => $id]);
+    }
+
+    /*
+     * Validar la hora de inicio con la hora final
+     */
+    private function validarHoraInicioFinal(Agenda $agenda)
+    {
+        if ($agenda->getHoraInicio() >= $agenda->getHoraFinal()) {
+            $this->addFlash('info', 'La hora de inicio no puede ser despues de la hora final de sesion o igual');
+            return false;
+        }
+
+        return true;
+    }
+
+    private function validarDiaHoraInicioHoraFinalEspecialista(Agenda $agenda)
+    {
+
+        if ($this->validarHoraInicioFinal($agenda)) {
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
+
+            $sesiones = $repository->createQueryBuilder('p')
+                ->where('p.id != :idAgenda')
+                ->setParameter('idAgenda', $agenda->getId())
+                ->andWhere('p.especialista = :especialista')
+                ->setParameter('especialista', $agenda->getEspecialista())
+                ->andWhere('p.dia = :dia')
+                ->setParameter('dia', $agenda->getDia())
+                ->andWhere('p.horaInicio >= :horaInicio')
+                ->setParameter('horaInicio', $agenda->getHoraInicio())
+                ->andWhere('p.horaFinal <= :horaFinal')
+                ->setParameter('horaFinal', $agenda->getHoraFinal())
+                ->getQuery()
+                ->getResult();
+
+            if ($sesiones != null) {
+                $this->addFlash('info', 'Existe una sesión con el mismo especialista, donde el dia, la hora inicial y hora final chocan y se encuentran con otra sesion existente');
+                return false;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
