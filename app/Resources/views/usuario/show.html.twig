@@ -3,6 +3,11 @@
 {% block main %}
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert-success" role="alert">
+                    {{ flash_message }}
+                </div>
+            {% endfor %}
             <div class="panel panel-default">
                 <div class="panel-heading">Ver usuario</div>
                 <div class="panel-body">

@@ -187,7 +187,9 @@ class SesionController extends Controller
         } elseif ($filtro == 'retrasadaa') {
             return $repository->createQueryBuilder('c')
                 ->innerJoin('c.agenda', 'a')
-                ->where('a.dia <= :dia')
+                ->where('c.ejecutada = :ejecutada')
+                ->setParameter('ejecutada', false)
+                ->andWhere('a.dia <= :dia')
                 ->setParameter('dia', date('Y-m-d'))
                 ->andWhere('a.horaFinal <= :horaFinal')
                 ->setParameter('horaFinal', date('H:i:s'))

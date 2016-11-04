@@ -25,7 +25,7 @@ class ClienteController extends Controller
     public function indexAction(Request $request)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Cliente');
-        $clientes = $repository->findAll();
+        $clientes = $query = $repository->createQueryBuilder('p')->orderBy('p.cedula', 'ASC')->getQuery()->getResult();
 
         $form = $this->createForm(ClienteBuscarType::class);
         $form->handleRequest($request);
@@ -102,7 +102,7 @@ class ClienteController extends Controller
      *
      * @Route("/cliente/{id}/editar", name="cliente_edit")
      * @Method({"GET", "POST"})
-     * @Security("is_granted('ROLE_MANAGER')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @ParamConverter("cliente", options={"mapping": {"id" : "id"}})
      */
     public function editAction(Cliente $cliente, Request $request)
@@ -116,7 +116,7 @@ class ClienteController extends Controller
 
             $this->addFlash('success', 'Se ha editado correctamente al cliente');
 
-            return $this->redirectToRoute('cliente_edit', ['id' => $cliente->getId()]);
+            return $this->redirectToRoute('cliente_show', ['id' => $cliente->getId()]);
         }
 
         return $this->render('cliente/edit.html.twig', [

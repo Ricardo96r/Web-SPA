@@ -14,6 +14,8 @@ namespace AppBundle\Form;
 use AppBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,30 +35,42 @@ class UsuarioType extends AbstractType
     {
         $builder
             ->add('username')
+
+            ->add('password', RepeatedType::class, array(
+                'type' => PasswordType::class,
+                'invalid_message' => 'Las contraseñas no coinciden',
+                'required' => true,
+                'first_options'  => array('label' => 'Nueva contraseña'),
+                'second_options' => array('label' => 'Repetir Contraseña'),
+            ))
             ->add('nombre')
-            ->add('password')
             ->add('apellido')
             ->add('telefono')
-            ->add('email')
-            ->add('activo');
+            ->add('email');
 
-        if (in_array('ROLE_ADMIN', $options['role'])) {
-            $builder
-                ->add('roles', ChoiceType::class, array(
-                    'choices' => array(
-                        'ROLE_ESPECIALISTA' => 'ROLE_ESPECIALISTA',
-                        'ROLE_MANAGER' => 'ROLE_MANAGER',
-                        'ROLE_ADMIN' => 'ROLE_ADMIN',
-                    ),
-                ))->addModelTransformer(new CallbackTransformer(
-                    function ($user) {
-                        return $user->setRoles($user->getRoles()[0]);
-                    },
-                    function ($user) {
-                        // transform the string back to an array
-                        return $user->setRoles([$user->getRoles()]);
-                    }
-                ));
+        if ($options['editar'] == true) {
+            $builder->add('activo');
+        }
+
+        if ($options['editar'] == false) {
+            if (in_array('ROLE_ADMIN', $options['role'])) {
+                $builder
+                    ->add('roles', ChoiceType::class, array(
+                        'choices' => array(
+                            'ROLE_ESPECIALISTA' => 'ROLE_ESPECIALISTA',
+                            'ROLE_MANAGER' => 'ROLE_MANAGER',
+                            'ROLE_ADMIN' => 'ROLE_ADMIN',
+                        ),
+                    ))->addModelTransformer(new CallbackTransformer(
+                        function ($user) {
+                            return $user->setRoles($user->getRoles()[0]);
+                        },
+                        function ($user) {
+                            // transform the string back to an array
+                            return $user->setRoles([$user->getRoles()]);
+                        }
+                    ));
+            }
         }
     }
 
@@ -67,7 +81,8 @@ class UsuarioType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'role' => ['ROLE_MANAGER']
+            'role' => ['ROLE_MANAGER'],
+            'editar' => false,
         ]);
     }
 }

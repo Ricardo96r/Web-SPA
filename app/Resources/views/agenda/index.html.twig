@@ -1,0 +1,112 @@
+{% extends 'final.html.twig' %}
+
+{% block main %}
+    <div class="container">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md-8">
+                <h2><span class="glyphicon glyphicon-ok-sign"></span> Administracion de agenda</h2>
+            </div>
+            <div class="col-md-4">
+                <!-- Boton nuevo cliente -->
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <a href="{{ path('homepage') }}">
+                            <div class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-share"></span> Agendar una sesion
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <!-- Buscar cliente -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Filtro</div>
+                            <div class="panel-body">
+                                {{ form_start(buscar_form) }}
+                                {{ form_widget(buscar_form) }}
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Filtrar</button>
+                                </div>
+                                {{ form_end(buscar_form) }}
+                            </div>
+                        </div>
+                        <a href="{{ path('homepage') }}">
+                            <div class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-calendar"></span> Vista de calendario
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+
+                <!-- Tabla de clientes -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                        <th>Ver</th>
+                        <th>Cliente</th>
+                        <th>Servicio</th>
+                        <th>Manager</th>
+                        <th>Especialista</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                        </thead>
+                        {% for agenda in agendas %}
+                            <tr>
+                                <td class="text-center"><a href="{{ path('sesion_show', { id: agenda.sesion.id }) }}"><span
+                                                class="glyphicon glyphicon-info-sign"
+                                                aria-hidden="true"></span></a></td>
+                                <td>{{ agenda.sesion.cliente.cedula }}
+                                    - {{ agenda.sesion.cliente.nombre }} {{ agenda.sesion.cliente.apellido }}</td>
+                                <td>{{ agenda.sesion.servicio.nombre }}</td>
+                                <td>{{ agenda.sesion.manager.username }}
+                                    - {{ agenda.sesion.manager.nombre }} {{ agenda.sesion.manager.apellido }}</td>
+                                <td>{{ agenda.especialista.username }}
+                                    - {{ agenda.especialista.nombre }} {{ agenda.especialista.apellido }}</td>
+                                <td class="text-center"><a href="{{ path('agenda_edit', { id: agenda.sesion.id }) }}"><span
+                                                class="glyphicon glyphicon-edit"
+                                                aria-hidden="true"></span></a></td>
+                                <td class="text-center"><a href="" data-toggle="modal"
+                                                           data-target="#myModalAgenda{{ agenda.sesion.id }}"><span
+                                                class="glyphicon glyphicon-remove-circle"
+                                                aria-hidden="true"></span></a></td>
+                                <div class="modal fade" id="myModalAgenda{{ agenda.sesion.id }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel{{ agenda.sesion.id }}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                            aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">¿Seguro que quieres borrar la
+                                                    agenda?</h4>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                                </button>
+                                                <a href="{{ path('agenda_delete', {id: agenda.sesion.id}) }}">
+                                                    <button type="button" class="btn btn-danger">Borrar agenda</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

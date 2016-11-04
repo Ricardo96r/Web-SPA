@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -24,6 +25,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     * @Assert\Email()
      */
     private $email;
 
@@ -59,6 +61,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="telefono", type="string", length=45, nullable=false)
+     * @Assert\Regex(pattern="/\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})? ?(\w{1,10}\s?\d{1,6})?/", message="Número de telefono incorrecto. (Ejemplo +58 412 5556566)")
      */
     private $telefono;
 
@@ -67,7 +70,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="activo", type="boolean", nullable=false)
      */
-    private $activo;
+    private $activo = true;
 
     /**
      * @var integer

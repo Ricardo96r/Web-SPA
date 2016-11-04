@@ -31,7 +31,10 @@ class UsuarioController extends Controller
                 ->getQuery();
             $usuarios = $query->getResult();
         } else {
-            $usuarios = $repository->findAll();
+            $query = $repository->createQueryBuilder('p')
+                ->orderBy('p.roles')
+                ->getQuery();
+            $usuarios = $query->getResult();
         }
 
         return $this->render('usuario/index.html.twig', [
@@ -101,15 +104,20 @@ class UsuarioController extends Controller
     public function editAction(User $usuario, Request $request)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $editForm = $this->createForm(UsuarioType::class, $usuario, ['role' => $this->getUser()->getRoles()]);
+        $editForm = $this->createForm(UsuarioType::class, $usuario, ['role' => $this->getUser()->getRoles(), 'editar' => true]);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $encoder = $this->get('security.password_encoder');
+            $encodedPassword = $encoder->encodePassword($usuario, $usuario->getPassword());
+            $usuario->setPassword($encodedPassword);
+            
             $entityManager->flush();
 
             $this->addFlash('success', 'Se ha editado correctamente al usuario');
 
-            return $this->redirectToRoute('usuario_edit', ['id' => $usuario->getId()]);
+            return $this->redirectToRoute('usuario_show', ['id' => $usuario->getId()]);
         }
 
         return $this->render('usuario/edit.html.twig', [

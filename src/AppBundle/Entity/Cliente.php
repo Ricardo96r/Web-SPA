@@ -40,6 +40,7 @@ class Cliente
      * @var string
      *
      * @ORM\Column(name="celular", type="string", length=45, nullable=true)
+     * @Assert\Regex(pattern="/\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})? ?(\w{1,10}\s?\d{1,6})?/", message="Número de celular incorrecto. (Ejemplo +58 412 5556566)")
      */
     private $celular;
 
@@ -47,6 +48,7 @@ class Cliente
      * @var string
      *
      * @ORM\Column(name="telefono", type="string", length=45, nullable=true)
+     * @Assert\Regex(pattern="/\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})? ?(\w{1,10}\s?\d{1,6})?/", message="Número de telefono incorrecto. (Ejemplo +58 412 5556566)")
      */
     private $telefono;
 
@@ -54,6 +56,7 @@ class Cliente
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=45, nullable=true, unique=true)
+     * @Assert\Email()
      */
     private $email;
 

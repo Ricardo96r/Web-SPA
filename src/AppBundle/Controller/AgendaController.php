@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Agenda;
 use AppBundle\Entity\Sesion;
+use AppBundle\Form\AgendaBuscarType;
 use AppBundle\Form\AgendaType;
 use AppBundle\Form\SesionType;
 use DateTime;
@@ -18,6 +19,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AgendaController extends Controller
 {
+    /**
+     * @Route("/agenda", name="agenda_index")
+     * @Method({"GET", "POST"})
+     * @Security("is_granted('ROLE_MANAGER')")
+     */
+    public function indexAction(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
+        $sesiones = $repository->findAll();
+
+        $buscarForm = $this->createForm(AgendaBuscarType::class, ['filtro' => 'todo']);
+        $buscarForm->handleRequest($request);
+
+        if ($buscarForm->isSubmitted() && $buscarForm->isValid()) {
+            $sesiones = $this->filtrarAgendas($buscarForm->getData());
+        }
+
+        return $this->render('agenda/index.html.twig', [
+            'agendas' => $sesiones,
+            'buscar_form' => $buscarForm->createView(),
+        ]);
+    }
+
     /**
      * @Route("/agenda/{id}/crear", name="agenda_create")
      * @Security("is_granted('ROLE_MANAGER')")
@@ -119,9 +143,8 @@ class AgendaController extends Controller
                 ->setParameter('especialista', $agenda->getEspecialista())
                 ->andWhere('p.dia = :dia')
                 ->setParameter('dia', $agenda->getDia())
-                ->andWhere('p.horaInicio >= :horaInicio')
+                ->andWhere('p.horaInicio >= :horaInicio AND p.horaFinal <= :horaFinal')
                 ->setParameter('horaInicio', $agenda->getHoraInicio())
-                ->andWhere('p.horaFinal <= :horaFinal')
                 ->setParameter('horaFinal', $agenda->getHoraFinal())
                 ->getQuery()
                 ->getResult();
@@ -134,6 +157,25 @@ class AgendaController extends Controller
             return true;
         } else {
             return false;
+        }
+    }
+
+    private function filtrarAgendas(Array $data)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
+
+        $filtro = $data['filtro'];
+
+        if ($filtro == "todo") {
+            return $repository->findAll();
+
+        } elseif ($filtro == 'agendasNoEjecutadas') {
+            return $repository->createQueryBuilder('p')
+                ->innerJoin('p.sesion', 's')
+                ->where('s.ejecutada = :ejecutada')
+                ->setParameter('ejecutada', false)
+                ->getQuery()
+                ->getResult();
         }
     }
 

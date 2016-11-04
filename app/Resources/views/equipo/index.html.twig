@@ -12,9 +12,9 @@
                 <div class="row">
                     <div class="col-md-8">
                         {% if is_granted('ROLE_ADMIN') %}
-                            <h2>Administracion de equipo</h2>
+                            <h2><span class="glyphicon glyphicon-ok-sign"></span> Administracion de equipo</h2>
                         {% else %}
-                            <h2>Ver equipos</h2>
+                            <h2><span class="glyphicon glyphicon-ok-sign"></span> Ver equipos</h2>
                         {% endif %}
                     </div>
                     <div class="col-md-4">
@@ -42,7 +42,7 @@
                         {% for equipo in equipos %}
                             <tr>
                                 <td class="text-center"><a href="{{ path('equipo_show', { id: equipo.id }) }}"><span
-                                                class="glyphicon glyphicon-edit"
+                                                class="glyphicon glyphicon-info-sign"
                                                 aria-hidden="true"></span></a></td>
                                 <td>{{ equipo.nombre }}</td>
                             </tr>
