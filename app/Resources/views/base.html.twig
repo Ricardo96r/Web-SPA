@@ -6,11 +6,18 @@
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}">
     <head>
+        {% block javascripts %}
+            <script src="{{ asset('js/jquery.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        {% endblock %}
+        {% block javascript %}{% endblock %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <title>{% block title %}Symfony Demo application{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/fullcalendar.min.css') }}">
+            <link rel="stylesheet" media="print" href="{{ asset('css/fullcalendar.print.css') }}">
             <link rel="stylesheet" href="{{ asset('css/estilos.css') }}">
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -20,10 +27,6 @@
         {% block header %}{% endblock %}
         {% block main %}{% endblock %}
         {% block footer %}{% endblock %}
-        {% block javascripts %}
-            <script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-        {% endblock %}
 
         {# it's not mandatory to set the timezone in localizeddate(). This is done to
            avoid errors when the 'intl' PHP extension is not available and the application

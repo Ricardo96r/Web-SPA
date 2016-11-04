@@ -11,15 +11,12 @@
 
 namespace AppBundle\Form;
 
-use AppBundle\Entity\Agenda;
 use AppBundle\Entity\Servicio;
 use AppBundle\Entity\Sesion;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -30,7 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class AgendaType extends AbstractType
+class CalendarioFiltroType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -49,15 +46,7 @@ class AgendaType extends AbstractType
                         ->setParameter('roleManager', '["ROLE_ESPECIALISTA"]');
                 },
             ))
-            ->add('dia', DateType::class, ['data' => new \DateTime()])
-            ->add('hora_inicio', TimeType::class, array(
-                'input' => 'datetime',
-                'widget' => 'choice',
-            ))
-            ->add('hora_final', TimeType::class, array(
-                'input' => 'datetime',
-                'widget' => 'choice',
-            ));
+        ;
     }
 
     /**
@@ -66,7 +55,7 @@ class AgendaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Agenda::class,
+            'validation_groups' => false,
         ]);
     }
 }

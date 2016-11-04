@@ -141,17 +141,43 @@ class AgendaController extends Controller
                 ->setParameter('idAgenda', $agenda->getId())
                 ->andWhere('p.especialista = :especialista')
                 ->setParameter('especialista', $agenda->getEspecialista())
-                ->andWhere('p.dia = :dia')
-                ->setParameter('dia', $agenda->getDia())
-                ->andWhere('p.horaInicio >= :horaInicio AND p.horaFinal <= :horaFinal')
-                ->setParameter('horaInicio', $agenda->getHoraInicio())
-                ->setParameter('horaFinal', $agenda->getHoraFinal())
+                ->andWhere('p.dia = :dia AND (p.horaInicio >= :horaInicio AND p.horaInicio <= :horaInicio OR p.horaFinal >= :horaFinal AND p.horaFinal <= :horaFinal)')
+                ->setParameter('dia', $agenda->getDia()->format('Y-m-d'))
+                ->setParameter('horaInicio', $agenda->getHoraInicio()->format('h-i-s'))
+                ->setParameter('horaFinal', $agenda->getHoraFinal()->format('h-i-s'))
                 ->getQuery()
                 ->getResult();
 
             if ($sesiones != null) {
                 $this->addFlash('info', 'Existe una sesión con el mismo especialista, donde el dia, la hora inicial y hora final chocan y se encuentran con otra sesion existente');
                 return false;
+            } else {
+                $sesiones = $repository->createQueryBuilder('p')
+                    ->where('p.id != :idAgenda')
+                    ->setParameter('idAgenda', $agenda->getId())
+                    ->andWhere('p.especialista = :especialista')
+                    ->setParameter('especialista', $agenda->getEspecialista())
+                    ->andWhere('p.dia = :dia AND (p.horaInicio <= :horaInicio OR p.horaFinal >= :horaFinal)')
+                    ->setParameter('dia', $agenda->getDia()->format('Y-m-d'))
+                    ->setParameter('horaInicio', $agenda->getHoraInicio()->format('h-i-s'))
+                    ->setParameter('horaFinal', $agenda->getHoraFinal()->format('h-i-s'))
+                    ->getQuery()
+                    ->getResult();
+                foreach ($sesiones as $sesion) {
+                    if ($sesion->getHoraInicio() <= $agenda->getHoraInicio()) {
+                        if ($sesion->getHoraFinal() >= $agenda->getHoraInicio()) {
+                            $this->addFlash('info', 'Existe una sesión con el mismo especialista, donde el dia, la hora inicial y hora final chocan y se encuentran con otra sesion existente');
+                            return false;
+                        }
+                    }
+                    if ($sesion->getHoraInicio() >= $agenda->getHoraInicio()) {
+                        if ($sesion->getHoraInicio() <= $agenda->getHoraFinal()) {
+                            $this->addFlash('info', 'Existe una sesión con el mismo especialista, donde el dia, la hora inicial y hora final chocan y se encuentran con otra sesion existente');
+                            return false;
+                        }
+                    }
+
+                }
             }
 
             return true;
