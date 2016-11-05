@@ -1,11 +1,3 @@
-# These first lines load the all routes defined as @Route() annotations in any
-# controller defined inside the src/AppBundle/Controller/ directory. Controllers
-# are loaded recursively, so you can separate them into subdirectories.
-# If you don't like to add annotations in your applications, you can also define
-# the routes in YAML, XML or PHP files.
-# See http://symfony.com/doc/current/book/routing.html
 app:
-    resource: '@AppBundle/Controller/'
+    resource: "@AppBundle/Controller/"
     type:     annotation
-
-
