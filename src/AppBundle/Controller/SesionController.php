@@ -24,6 +24,10 @@ class SesionController extends Controller
      */
     public function indexAction(Request $request)
     {
+        if ( ! $this->isGranted('ROLE_MANAGER')) {
+            return $this->redirectToRoute('calendario_index');
+        }
+
         if ($this->isGranted('ROLE_MANAGER')) {
             $repository = $this->getDoctrine()->getRepository('AppBundle:Sesion');
             $sesiones = $repository->findAll();

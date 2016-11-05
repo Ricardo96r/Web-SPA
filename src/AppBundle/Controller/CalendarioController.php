@@ -34,17 +34,26 @@ class CalendarioController extends Controller
                 ->getQuery()
                 ->getResult();
         } else {
-            $repository = $this->getDoctrine()->getRepository('AppBundle:User');
-            $especialista = $repository->createQueryBuilder('u')
-                ->where('u.roles = :roleManager')
-                ->setParameter('roleManager', '["ROLE_ESPECIALISTA"]')
-                ->setMaxResults(1)->getQuery()->getOneOrNullResult();
-            $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
-            $agendas = $repository->createQueryBuilder('p')
-                ->where('p.especialista = :especialista')
-                ->setParameter('especialista', $especialista->getId())
-                ->getQuery()
-                ->getResult();
+            if ($this->isGranted('ROLE_MANAGER')) {
+                $repository = $this->getDoctrine()->getRepository('AppBundle:User');
+                $especialista = $repository->createQueryBuilder('u')
+                    ->where('u.roles = :roleManager')
+                    ->setParameter('roleManager', '["ROLE_ESPECIALISTA"]')
+                    ->setMaxResults(1)->getQuery()->getOneOrNullResult();
+                $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
+                $agendas = $repository->createQueryBuilder('p')
+                    ->where('p.especialista = :especialista')
+                    ->setParameter('especialista', $especialista->getId())
+                    ->getQuery()
+                    ->getResult();
+            } else {
+                $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
+                $agendas = $repository->createQueryBuilder('p')
+                    ->where('p.especialista = :especialista')
+                    ->setParameter('especialista', $this->getUser()->getId())
+                    ->getQuery()
+                    ->getResult();
+            }
         }
 
         return $this->render('calendario.html.twig', [

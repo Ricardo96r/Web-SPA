@@ -58,8 +58,10 @@
                         <th>Servicio</th>
                         <th>Manager</th>
                         <th>Especialista</th>
+                        {% if is_granted('ROLE_ADMIN') %}
                         <th>Editar</th>
                         <th>Eliminar</th>
+                        {% endif %}
                         </thead>
                         {% for agenda in agendas %}
                             <tr>
@@ -73,6 +75,7 @@
                                     - {{ agenda.sesion.manager.nombre }} {{ agenda.sesion.manager.apellido }}</td>
                                 <td>{{ agenda.especialista.username }}
                                     - {{ agenda.especialista.nombre }} {{ agenda.especialista.apellido }}</td>
+                                {% if is_granted('ROLE_ADMIN') %}
                                 <td class="text-center"><a href="{{ path('agenda_edit', { id: agenda.sesion.id }) }}"><span
                                                 class="glyphicon glyphicon-edit"
                                                 aria-hidden="true"></span></a></td>
@@ -101,6 +104,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </table>

@@ -17,19 +17,34 @@
                 <div class="panel-heading">Ver sesion</div>
                 <div class="panel-body">
                     <p><strong>Cliente:</strong>
-                        <a href="{{ path('cliente_show', {id: sesion.cliente.id}) }}">
+                        {% if is_granted('ROLE_MANAGER') %}
+                            <a href="{{ path('cliente_show', {id: sesion.cliente.id}) }}">
+                                {{ sesion.cliente.cedula }}
+                                - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}
+                            </a>
+                        {% else %}
                             {{ sesion.cliente.cedula }}
                             - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}
-                        </a>
+                        {% endif %}
                     </p>
                     <p><strong>Servicio:</strong>
-                        <a href="{{ path('servicio_show', {id: sesion.servicio.id}) }}">{{ sesion.servicio.nombre }}</a>
+                        {% if is_granted('ROLE_MANAGER') %}
+                            <a href="{{ path('servicio_show', {id: sesion.servicio.id}) }}">{{ sesion.servicio.nombre }}</a>
+                        {% else %}
+                            {{ sesion.servicio.nombre }}
+                        {% endif %}
                     </p>
+
                     <p><strong>Manager:</strong>
-                        <a href="{{ path('usuario_show', {id: sesion.manager.id}) }}">
+                        {% if is_granted('ROLE_MANAGER') %}
+                            <a href="{{ path('usuario_show', {id: sesion.manager.id}) }}">
+                                {{ sesion.manager.username }}
+                                - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}
+                            </a>
+                        {% else %}
                             {{ sesion.manager.username }}
                             - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}
-                        </a>
+                        {% endif %}
                     </p>
                     {% if sesion.agenda == null %}
                         <p><strong>Agenda:</strong> Sin agendar</p>
@@ -91,32 +106,35 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">Ver servicio</div>
-                <div class="panel-body">
-                    <p><strong>Nombre:</strong> {{ sesion.servicio.nombre }}</p>
-                    <p><strong>Descripcion:</strong> {{ sesion.servicio.descripcion }}</p>
-                    <p><strong>Duracion:</strong> {{ sesion.servicio.duracion }}</p>
-                    <p><strong>Precio:</strong> {{ sesion.servicio.precio }}</p>
-                    <p><strong>Tipo:</strong> <a
-                                href="{{ path('tipo_show', {id: sesion.servicio.tipo.id}) }}">{{ sesion.servicio.tipo.nombre }}</a>
-                    </p>
-                    <p><strong>Activo:</strong> {% if (sesion.servicio.activo) %} si {% else %} no {% endif %}</p>
-                    <p><strong>Equipo:</strong></p>
-                    <ul>
-                        {% for equipo in sesion.servicio.equipo %}
-                            <a href="{{ path('equipo_show', {id: equipo.id}) }}">
-                                <li>{{ equipo.nombre }}</li>
+
+            {% if is_granted('ROLE_MANAGER') %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Ver servicio</div>
+                    <div class="panel-body">
+                        <p><strong>Nombre:</strong> {{ sesion.servicio.nombre }}</p>
+                        <p><strong>Descripcion:</strong> {{ sesion.servicio.descripcion }}</p>
+                        <p><strong>Duracion:</strong> {{ sesion.servicio.duracion }}</p>
+                        <p><strong>Precio:</strong> {{ sesion.servicio.precio }}</p>
+                        <p><strong>Tipo:</strong> <a
+                                    href="{{ path('tipo_show', {id: sesion.servicio.tipo.id}) }}">{{ sesion.servicio.tipo.nombre }}</a>
+                        </p>
+                        <p><strong>Activo:</strong> {% if (sesion.servicio.activo) %} si {% else %} no {% endif %}</p>
+                        <p><strong>Equipo:</strong></p>
+                        <ul>
+                            {% for equipo in sesion.servicio.equipo %}
+                                <a href="{{ path('equipo_show', {id: equipo.id}) }}">
+                                    <li>{{ equipo.nombre }}</li>
+                                </a>
+                            {% endfor %}
+                        </ul>
+                        <div class="form-group">
+                            <a href="{{ path('servicio_show', {id: sesion.servicio.id}) }}">
+                                <div class="btn btn-default btn-lg btn-block">Ver servicio</div>
                             </a>
-                        {% endfor %}
-                    </ul>
-                    <div class="form-group">
-                        <a href="{{ path('servicio_show', {id: sesion.servicio.id}) }}">
-                            <div class="btn btn-default btn-lg btn-block">Ver servicio</div>
-                        </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
 
 
@@ -187,41 +205,43 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="panel panel-default">
-                <div class="panel-heading">Ver cliente</div>
-                <div class="panel-body">
-                    <p><strong>Nombre:</strong> {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</p>
-                    <p><strong>Cedula:</strong> {{ sesion.cliente.cedula }}</p>
-                    <p><strong>Celular:</strong> {{ sesion.cliente.celular }}</p>
-                    <p><strong>Telefono:</strong> {{ sesion.cliente.telefono }}</p>
-                    <p><strong>Email:</strong> {{ sesion.cliente.email }}</p>
-                    <div class="form-group">
-                        <a href="{{ path('cliente_show', {id: sesion.cliente.id}) }}">
-                            <div class="btn btn-default btn-lg btn-block">Ver cliente</div>
-                        </a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Ver cliente</div>
+                    <div class="panel-body">
+                        <p><strong>Nombre:</strong> {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</p>
+                        <p><strong>Cedula:</strong> {{ sesion.cliente.cedula }}</p>
+                        <p><strong>Celular:</strong> {{ sesion.cliente.celular }}</p>
+                        <p><strong>Telefono:</strong> {{ sesion.cliente.telefono }}</p>
+                        <p><strong>Email:</strong> {{ sesion.cliente.email }}</p>
+                        <div class="form-group">
+                            <a href="{{ path('cliente_show', {id: sesion.cliente.id}) }}">
+                                <div class="btn btn-default btn-lg btn-block">Ver cliente</div>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% if sesion.agenda != null %}
-            <div class="panel panel-default">
-                <div class="panel-heading">Ver especialista</div>
-                <div class="panel-body">
-                    <p>
-                        <strong>Nombre:</strong> {{ sesion.agenda.especialista.nombre }} {{ sesion.agenda.especialista.apellido }}
-                    </p>
-                    <p><strong>Username:</strong> {{ sesion.agenda.especialista.username }}</p>
-                    <p><strong>Telefono:</strong> {{ sesion.agenda.especialista.telefono }}</p>
-                    <p><strong>Email:</strong> {{ sesion.agenda.especialista.email }}</p>
-                    <p>
-                        <strong>Activo:</strong> {% if (sesion.agenda.especialista.activo) %} si {% else %} no {% endif %}
-                    </p>
-                    <div class="form-group">
-                        <a href="{{ path('cliente_show', {id: sesion.agenda.especialista.id}) }}">
-                            <div class="btn btn-default btn-lg btn-block">Ver especialista</div>
-                        </a>
+                {% if sesion.agenda != null %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Ver especialista</div>
+                        <div class="panel-body">
+                            <p>
+                                <strong>Nombre:</strong> {{ sesion.agenda.especialista.nombre }} {{ sesion.agenda.especialista.apellido }}
+                            </p>
+                            <p><strong>Username:</strong> {{ sesion.agenda.especialista.username }}</p>
+                            <p><strong>Telefono:</strong> {{ sesion.agenda.especialista.telefono }}</p>
+                            <p><strong>Email:</strong> {{ sesion.agenda.especialista.email }}</p>
+                            <p>
+                                <strong>Activo:</strong> {% if (sesion.agenda.especialista.activo) %} si {% else %} no {% endif %}
+                            </p>
+                            <div class="form-group">
+                                <a href="{{ path('cliente_show', {id: sesion.agenda.especialista.id}) }}">
+                                    <div class="btn btn-default btn-lg btn-block">Ver especialista</div>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>

@@ -37,22 +37,30 @@
 
 {% block main %}
     <div class="container">
-        <h2><span class="glyphicon glyphicon-calendar"></span> Vista de calendario</h2>
+        {% if is_granted('ROLE_MANAGER') %}
+            <h2><span class="glyphicon glyphicon-calendar"></span> Vista de calendario</h2>
+        {% else %}
+            <h2><span class="glyphicon glyphicon-calendar"></span> Agenda de trabajo</h2>
+        {% endif %}
         <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Filtro</div>
-                    <div class="panel-body">
-                        {{ form_start(form) }}
-                        {{ form_widget(form) }}
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Filtrar</button>
+            {% if is_granted('ROLE_MANAGER') %}
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Filtro</div>
+                        <div class="panel-body">
+                            {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-default"><span
+                                            class="glyphicon glyphicon-search"></span> Filtrar
+                                </button>
+                            </div>
+                            {{ form_end(form) }}
                         </div>
-                        {{ form_end(form) }}
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8">
+            {% endif %}
+            <div class="{% if is_granted('ROLE_MANAGER') %} col-md-8 {% else %} col-md-12 {% endif %}">
                 <div id='calendar'></div>
             </div>
         </div>

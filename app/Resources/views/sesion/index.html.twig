@@ -23,7 +23,18 @@
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <a href="{{ path('sesion_create') }}">
-                                        <div class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-plus"></span> Nueva sesion
+                                        <div class="btn btn-primary btn-lg btn-block"><span
+                                                    class="glyphicon glyphicon-plus"></span> Nueva sesion
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <a href="{{ path('calendario_index') }}">
+                                        <div class="btn btn-success btn-lg btn-block"><span
+                                                    class="glyphicon glyphicon-calendar"></span> Vista de calendario
                                         </div>
                                     </a>
                                 </div>
@@ -42,7 +53,9 @@
                             {{ form_start(buscar_form) }}
                             {{ form_widget(buscar_form) }}
                             <div class="form-group">
-                                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Filtrar</button>
+                                <button type="submit" class="btn btn-default"><span
+                                            class="glyphicon glyphicon-search"></span> Filtrar
+                                </button>
                             </div>
                             {{ form_end(buscar_form) }}
                         </div>
@@ -78,7 +91,6 @@
                             <th>Seleccionar</th>
                             <th>Cliente</th>
                             <th>Servicio</th>
-                            <th>Manager</th>
                             <th>Dia</th>
                             <th>Comienzo</th>
                             <th>Fin</th>
@@ -91,8 +103,6 @@
                                     <td>{{ sesion.cliente.cedula }}
                                         - {{ sesion.cliente.nombre }} {{ sesion.cliente.apellido }}</td>
                                     <td>{{ sesion.servicio.nombre }}</td>
-                                    <td>{{ sesion.manager.username }}
-                                        - {{ sesion.manager.nombre }} {{ sesion.manager.apellido }}</td>
                                     <td>{{ sesion.agenda.dia|date("m/d/Y") }}</td>
                                     <td>{{ sesion.agenda.horaInicio|date("h:i:s a", false) }}</td>
                                     <td>{{ sesion.agenda.horaFinal|date("h:i:s a", false) }}</td>
