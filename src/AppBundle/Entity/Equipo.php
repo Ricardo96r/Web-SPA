@@ -3,11 +3,13 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Equipo
  *
  * @ORM\Table(name="equipo")
+ * @UniqueEntity("nombre")
  * @ORM\Entity
  */
 class Equipo

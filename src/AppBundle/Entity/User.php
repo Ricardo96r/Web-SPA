@@ -5,11 +5,13 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
  *
  * @ORM\Table(name="user")
+ * @UniqueEntity("username")
  * @ORM\Entity
  */
 class User implements UserInterface
@@ -24,7 +26,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
      * @Assert\Email()
      */
     private $email;
