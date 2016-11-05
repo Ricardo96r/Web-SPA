@@ -6,7 +6,7 @@
         "symfony"
     ],
     "website": "https://symfony.com/download",
-    "repository": "https://github.com/symfony/symfony-demo",
+    "repository": "https://github.com/Ricardo96r/web-spa",
     "logo": "https://symfony.com/images/v5/pictos/demoapp.svg?v=4",
     "success_url": "/",
     "env": {

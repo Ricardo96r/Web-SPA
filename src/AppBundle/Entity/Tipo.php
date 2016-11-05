@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tipo
  *
- * @ORM\Table(name="tipo", uniqueConstraints={@ORM\UniqueConstraint(name="nombre_UNIQUE", columns={"nombre"})})
+ * @ORM\Table(name="tipo")
  * @ORM\Entity
  */
 class Tipo
@@ -15,7 +15,7 @@ class Tipo
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=45, nullable=false, unique=true)
      */
     private $nombre;
 

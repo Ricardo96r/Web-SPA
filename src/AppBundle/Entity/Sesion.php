@@ -8,7 +8,7 @@ use Doctrine\ORM\Events;
 /**
  * Sesion
  *
- * @ORM\Table(name="sesion", indexes={@ORM\Index(name="fk_sesion_user1_idx", columns={"manager_id"}), @ORM\Index(name="fk_sesion_servicio1_idx", columns={"servicio_id"}), @ORM\Index(name="fk_sesion_cliente1_idx", columns={"cliente_id"})})
+ * @ORM\Table(name="sesion")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
