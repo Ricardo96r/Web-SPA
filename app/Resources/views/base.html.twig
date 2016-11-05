@@ -4,7 +4,7 @@
    See http://symfony.com/doc/current/book/templating.html#template-inheritance-and-layouts
 #}
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}">
+<html>
     <head>
         {% block javascripts %}
             <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -27,10 +27,5 @@
         {% block header %}{% endblock %}
         {% block main %}{% endblock %}
         {% block footer %}{% endblock %}
-
-        {# it's not mandatory to set the timezone in localizeddate(). This is done to
-           avoid errors when the 'intl' PHP extension is not available and the application
-           is forced to use the limited "intl polyfill", which only supports UTC and GMT #}
-        <!-- Page rendered on {{ 'now'|localizeddate('long', 'long', null, 'UTC') }} -->
     </body>
 </html>
