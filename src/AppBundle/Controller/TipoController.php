@@ -11,17 +11,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @IgnoreAnnotation({"cond", "endcond"})
+ */
 class TipoController extends Controller
 {
     /**
+     * Muestra la vista de todos los tipos de servicio
+     * @return Response Devuelve la vista de todos los tipos de servicio
+     *
+     * @cond
      * @Route("/tipo", name="tipo_index")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_MANAGER')")
+     * @cond
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Tipo');
         $tipos = $repository->findAll();
@@ -32,12 +41,16 @@ class TipoController extends Controller
     }
 
     /**
-     *  Crea un nuevo Usuario
+     *  Crea un nuevo tipo de servicio
+     * @param Request $request Los datos del nuevo tipo de servicio
+     * @return RedirectResponse Redirecciona a la vista de todos los tipos de servicio si el formulario es enviado con éxito
+     * @return Response Devuelve el formulario de creacion de un tipo de servicio
      *
+     * @cond
      * @Route("/tipo/crear", name="tipo_create")
      * @Security("is_granted('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
-     *
+     * @endcond
      */
     public function createAction(Request $request)
     {
@@ -63,10 +76,16 @@ class TipoController extends Controller
 
 
     /**
+     * Muestra los datos del tipo de servicio seleccionado
+     * @param Tipo $tipo El tipo de servicio seleccionado
+     * @return Response Devuelve la vista de los datos del tipo de servicio seleccionado
+     *
+     * @cond
      * @Route("/tipo/{id}", name="tipo_show")
      * @Security("is_granted('ROLE_MANAGER')")
      * @Method("GET")
      * @ParamConverter("tipo", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function showAction(Tipo $tipo)
     {
@@ -74,12 +93,18 @@ class TipoController extends Controller
     }
 
     /**
-     * Edita un tipo existente
+     * Edita un tipo de servicio
+     * @param Tipo $tipo El tipo de servicio seleccionado
+     * @param Request $request Los datos editados del tipo de servicio seleccionado
+     * @return RedirectResponse Redirecciona a la vista de todos los servicios si el formulario es enviado con éxito
+     * @return Response Devuelve el formulario de editar un tipo de servicio
      *
+     * @cond
      * @Route("/tipo/{id}/editar", name="tipo_edit")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      * @ParamConverter("tipo", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function editAction(Tipo $tipo, Request $request)
     {

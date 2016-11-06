@@ -14,15 +14,27 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ *
+ * @IgnoreAnnotation({"cond", "endcond"})
+ */
 class AgendaController extends Controller
 {
     /**
+     *
+     *  Motrar todas las agendas
+     *  @param Request $request Tipo de filtro a aplicar
+     *  @return Response Muestra la pantalla de agenda
+     *
+     * @cond
      * @Route("/agenda", name="agenda_index")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_MANAGER')")
+     * @endcond
      */
     public function indexAction(Request $request)
     {
@@ -43,10 +55,19 @@ class AgendaController extends Controller
     }
 
     /**
+     * Agendar una sesión
+     *
+     * @param Sesion $sesion Sesión para agendar
+     * @param Request $request Datos de la agenda
+     * @return RedirectResponse Redirecciona a la pantalla de la sesión seleccionada si fue enviando con éxito el formulario
+     * @return Response Muestra el formulario de la pantalla de agendar sesión en caso de fracaso
+     *
+     * @cond
      * @Route("/agenda/{id}/crear", name="agenda_create")
      * @Security("is_granted('ROLE_MANAGER')")
      * @Method({"GET", "POST"})
      * @ParamConverter("sesion", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function agendarAction(Sesion $sesion, Request $request)
     {
@@ -72,12 +93,19 @@ class AgendaController extends Controller
     }
 
     /**
-     * Edita un agenda existente
+     * Editar la agenda de una sesión
      *
+     * @param Agenda $agenda Agenda que se va a editar
+     * @param Request $request Datos que se van a editar de la agenda
+     * @return RedirectResponse Redirecciona a la pantalla de la sesión seleccionada
+     * @return Response Muestra el formulario de editar agenda
+     *
+     * @cond
      * @Route("/agenda/{id}/editar", name="agenda_edit")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_MANAGER')")
      * @ParamConverter("agenda", class="AppBundle:Agenda", options={"mapping": {"id" : "sesion"}})
+     * @endcond
      */
     public function editAction(Agenda $agenda, Request $request)
     {
@@ -100,12 +128,18 @@ class AgendaController extends Controller
     }
 
     /**
-     * Edita un sesion existente
+     * Borrar la agenda de una sesión
      *
+     * @param Agenda $agenda Agenda que se va a borrar
+     * @param Request $request Respuesta de borrado.
+     * @return RedirectResponse Redirecciona a la pantalla de la sesión seleccionada
+     *
+     * @cond
      * @Route("/agenda/{id}/borrar", name="agenda_delete")
      * @Method("GET")
      * @Security("is_granted('ROLE_ADMIN')")
      * @ParamConverter("agenda", class="AppBundle:Agenda", options={"mapping": {"id" : "sesion"}})
+     * @endcond
      */
     public function deleteAction(Agenda $agenda, Request $request)
     {
@@ -117,8 +151,12 @@ class AgendaController extends Controller
         return $this->redirectToRoute('sesion_show', ['id' => $id]);
     }
 
-    /*
+    /**
      * Validar la hora de inicio con la hora final
+     *
+     * @param Agenda $agenda Agenda que se va a validar
+     *
+     * @return boolean Validado
      */
     private function validarHoraInicioFinal(Agenda $agenda)
     {
@@ -130,6 +168,13 @@ class AgendaController extends Controller
         return true;
     }
 
+
+    /**
+     * Validar que un especialista no tenga dos sesiones al mismo tiempo
+     *
+     * @param Agenda $agenda Agenda que se va a validar
+     * @return bool Validado
+     */
     private function validarDiaHoraInicioHoraFinalEspecialista(Agenda $agenda)
     {
 
@@ -186,6 +231,12 @@ class AgendaController extends Controller
         }
     }
 
+    /**
+     * Filtra las agendas
+     *
+     * @param array $data Tipo de filtro
+     * @return array Devuelve las agendas filtradas
+     */
     private function filtrarAgendas(Array $data)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');

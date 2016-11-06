@@ -12,15 +12,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @IgnoreAnnotation({"cond", "endcond"})
+ */
 class SesionController extends Controller
 {
     /**
+     * Muestra todas las sesiones en una vista
+     * @param Request $request El tipo de filtro seleccionado
+     * @return Response Devuelve la vista de todas las sesiones
+     *
+     * @cond
      * @Route("/", name="homepage")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_ESPECIALISTA')")
+     * @endcond
      */
     public function indexAction(Request $request)
     {
@@ -57,11 +67,16 @@ class SesionController extends Controller
     }
 
     /**
-     *  Crea un nuevo Usuario
+     *  Crea un nueva sesion
+     * @param Request $request Los datos de la nueva sesión
+     * @return RedirectResponse Redirecciona a la vista de todas las sesiones si el formulario se envió con éxito
+     * @return Response Devuelve la vista de formulario para crear sesión
      *
+     * @cond
      * @Route("/sesion/crear", name="sesion_create")
      * @Security("is_granted('ROLE_MANAGER')")
      * @Method({"GET", "POST"})
+     * @endcond
      *
      */
     public function createAction(Request $request)
@@ -88,10 +103,16 @@ class SesionController extends Controller
 
 
     /**
+     * Muestra los datos de la sesión seleccionada
+     * @param Sesion $sesion La sesión seleccionada
+     * @return Response Devuelve la vista de los datos de la sesión seleccionada
+     *
+     * @cond
      * @Route("/sesion/{id}", name="sesion_show")
      * @Security("is_granted('ROLE_ESPECIALISTA')")
      * @Method("GET")
      * @ParamConverter("sesion", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function showAction(Sesion $sesion)
     {
@@ -99,12 +120,18 @@ class SesionController extends Controller
     }
 
     /**
-     * Edita un sesion existente
+     * Edita un sesión existente
+     * @param Sesion $sesion La sesión seleccionada
+     * @param Request $request Los datos editados de la sesión seleccionada
+     * @return RedirectResponse Redirecciona a la vista de todas las sesiones si el formulario es enviado con éxito
+     * @return Response Devuelve la vista de formulario de edición de sesión
      *
+     * @cond
      * @Route("/sesion/{id}/editar", name="sesion_edit")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_ESPECIALISTA')")
      * @ParamConverter("sesion", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function editAction(Sesion $sesion, Request $request)
     {
@@ -125,12 +152,18 @@ class SesionController extends Controller
     }
 
     /**
-     * Edita un sesion existente
+     * Borra una sesión existente
+     * @param Sesion $sesion La sesión seleccionada
+     * @param Request $request Si se borran los datos
+     * @return RedirectResponse Redirecciona a la vista de todas las sesiones si se borra éxito
+     * @return RedirectResponse Redirecciona a la vista de la sesion si no se puede borrar con éxito
      *
+     * @cond
      * @Route("/sesion/{id}/borrar", name="sesion_delete")
      * @Method("GET")
      * @Security("is_granted('ROLE_ADMIN')")
      * @ParamConverter("sesion", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function deleteAction(Sesion $sesion, Request $request)
     {
@@ -146,6 +179,11 @@ class SesionController extends Controller
         }
     }
 
+    /**
+     * Valida si una sesión esta ejecutada sin agenda sin checkin
+     * @param Sesion $sesion La sesion a validar
+     * @return bool Validado
+     */
     private function validacionEjecutadaSinAgendaSinCheckIn(Sesion $sesion)
     {
         // validar si existe checkin y no tiene agenda, tambien si se hace checkin en un horario futuro
@@ -170,6 +208,11 @@ class SesionController extends Controller
         return true;
     }
 
+    /**
+     * Flitra las sesiones
+     * @param array $data Tipo de filtro
+     * @return Sesion Devuelve todas las sesiones filtradas
+     */
     private function filtrarSesiones(Array $data)
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:Sesion');

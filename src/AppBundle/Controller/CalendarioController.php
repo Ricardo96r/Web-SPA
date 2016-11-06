@@ -14,12 +14,21 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @IgnoreAnnotation({"cond", "endcond"})
+ */
 class CalendarioController extends Controller
 {
     /**
+     * Muestra la vista de calendario con su filtro por especialista
+     * @param Request $request Formulario de filtro
+     * @return Response Devuelve la vista de calendario
+     *
+     * @cond
      * @Route("/calendario", name="calendario_index")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_ESPECIALISTA')")
+     * @endcond
      */
     public function indexAction(Request $request)
     {

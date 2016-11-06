@@ -31,8 +31,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * See http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 class LoadFixtures implements FixtureInterface, ContainerAwareInterface
 {
@@ -74,10 +72,10 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
         }
 
         $user = new User();
-        $user->setUsername('Ricardo96r');
-        $user->setEmail('ricardo96r@gmail.com');
-        $user->setNombre('Ricardo');
-        $user->setApellido('Rodríguez');
+        $user->setUsername('admin');
+        $user->setEmail('admin@gmail.com');
+        $user->setNombre('Christian');
+        $user->setApellido('Guillen');
         $user->setActivo(true);
         $user->setRoles(['ROLE_ADMIN']);
         $user->setTelefono($faker->unique()->phoneNumber);

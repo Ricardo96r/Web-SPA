@@ -20,10 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * Defines the form used to create and manipulate blog posts.
- *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
+ * Formulario para crear y editar el tipo de servicio
  */
 class TipoType extends AbstractType
 {

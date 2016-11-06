@@ -10,17 +10,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @IgnoreAnnotation({"cond", "endcond"})
+ */
 class UsuarioController extends Controller
 {
     /**
+     * Muestra todos los usuarios
+     * @return Response Devuelve la vista de todos los usuarios
+     *
+     * @cond
      * @Route("/usuario", name="usuario_index")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_MANAGER')")
+     * @endcond
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $repository = $this->getDoctrine()->getRepository('AppBundle:User');
 
@@ -43,12 +52,16 @@ class UsuarioController extends Controller
     }
 
     /**
-     *  Crea un nuevo Usuario
+     *  Crea un nuevo usuario
+     * @param Request $request Los datos del nuevo usuario
+     * @return RedirectResponse Redirecciona a la vista de todos los usuarios si el formulario fue enviado con éxito
+     * @return Response Devuelve la vista del formulario de creacion de usuarios
      *
+     * @cond
      * @Route("/usuario/crear", name="usuario_create")
      * @Security("is_granted('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
-     *
+     * @endcond
      */
     public function createAction(Request $request)
     {
@@ -83,10 +96,16 @@ class UsuarioController extends Controller
 
 
     /**
+     * Muestra los datos de un usuario seleccionado
+     * @param User $usuario El usuario seleccionad
+     * @return Response Devuelve la vista de los datos del usuario seleccionado
+     *
+     * @cond
      * @Route("/usuario/{id}", name="usuario_show")
      * @Security("is_granted('ROLE_ESPECIALISTA')")
      * @Method("GET")
      * @ParamConverter("usuario", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function showAction(User $usuario)
     {
@@ -95,11 +114,17 @@ class UsuarioController extends Controller
 
     /**
      * Edita un usuario existente
+     * @param User $usuario El usuario seleccionado
+     * @param Request $request Los datos editados del usuario seleccionad
+     * @return RedirectResponse Redirecciona a la vista de todos los usuarios si el formulario es enviado con éxito
+     * @return Response Devuelve el formulario de editar un usuario
      *
+     * @cond
      * @Route("/usuario/{id}/editar", name="usuario_edit")
      * @Method({"GET", "POST"})
      * @Security("is_granted('ROLE_ADMIN')")
      * @ParamConverter("usuario", options={"mapping": {"id" : "id"}})
+     * @endcond
      */
     public function editAction(User $usuario, Request $request)
     {

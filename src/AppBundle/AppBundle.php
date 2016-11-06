@@ -30,8 +30,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  * considered a good practice, but you can also split your application code into
  * as many bundles as you want.
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 class AppBundle extends Bundle
 {

@@ -14,18 +14,21 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
- * Controller used to manage the application security.
- * See http://symfony.com/doc/current/cookbook/security/form_login_setup.html.
- *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
+ * @IgnoreAnnotation({"cond", "endcond"})
  */
 class SecurityController extends Controller
 {
     /**
+     * Inicio de sesión de usuario
+     * @return Response Devuelve la vista de inicio de sesión de usuario
+     *
+     * @cond
      * @Route("/login", name="security_login")
+     * @endcond
      */
     public function loginAction()
     {
@@ -40,12 +43,12 @@ class SecurityController extends Controller
     }
 
     /**
-     * This is the route the user can use to logout.
+     * Cerrar sesión de usuario
+     * @return void
      *
-     * But, this will never be executed. Symfony will intercept this first
-     * and handle the logout automatically. See logout in app/config/security.yml
-     *
+     * @cond
      * @Route("/logout", name="security_logout")
+     * @endcond
      */
     public function logoutAction()
     {

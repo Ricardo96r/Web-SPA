@@ -17,10 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Defines the form used to create and manipulate blog posts.
- *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
+ *  Formulario para buscar por clientes
  */
 class ClienteBuscarType extends AbstractType
 {
