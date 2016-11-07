@@ -75,7 +75,7 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
         $user->setUsername('admin');
         $user->setEmail('admin@gmail.com');
         $user->setNombre('Christian');
-        $user->setApellido('Guillen');
+        $user->setApellido('Guillén');
         $user->setActivo(true);
         $user->setRoles(['ROLE_ADMIN']);
         $user->setTelefono($faker->unique()->phoneNumber);
@@ -157,6 +157,7 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
         $repository = $manager->getRepository('AppBundle:User');
         $rolmanager = $repository->createQueryBuilder('p')
             ->where('p.roles = :rol')
+            ->andWhere('p.activo = true')
             ->setParameter('rol', '["ROLE_MANAGER"]')
             ->getQuery()
             ->getResult();
@@ -186,6 +187,7 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
         $repository = $manager->getRepository('AppBundle:User');
         $especialista = $repository->createQueryBuilder('p')
             ->where('p.roles = :rol')
+            ->andWhere('p.activo = true')
             ->setParameter('rol', '["ROLE_ESPECIALISTA"]')
             ->getQuery()
             ->getResult();
