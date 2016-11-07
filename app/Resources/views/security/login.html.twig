@@ -3,57 +3,78 @@
 {% block body_id 'login' %}
 
 {% block main %}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="jumbotron" style="background-color: rgba(241, 241, 241, 0.99);">
-                <h1 class="text-center">SISTEMA <span class="glyphicon glyphicon-random"></span> SPA</h1>
-                <p class="text-center">Centro de cuidado estético</p>
-            </div>
-        </div>
+
+    <div class="jumbotron" style="background-color: rgba(241, 241, 241, 0.99);">
+        <h1 class="text-center">SISTEMA <span class="glyphicon glyphicon-random"></span> SPA</h1>
+        <p class="text-center">Centro de cuidado estético</p>
+        <p class="text-center">Proyecto de ingenieria de software</p>
     </div>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3"></div>
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
             <div class="col-md-6">
-                <form class="form-horizontal" action="{{ path('security_login') }}" method="post">
-                    <div class="form-group">
-                        <label for="usuario" class="col-sm-2 control-label">Usuario</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="_username" class="form-control" id="username" placeholder="Usuario"
-                                   value="{{ last_username }}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Iniciar sesión</div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" action="{{ path('security_login') }}" method="post">
+                            <div class="form-group">
+                                <label for="usuario" class="col-sm-2 control-label">Usuario</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="_username" class="form-control" id="username"
+                                           placeholder="Usuario"
+                                           value="{{ last_username }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contrasena" class="col-sm-2 control-label">Contraseña</label>
+                                <div class="col-sm-10">
+                                    <input type="password" name="_password" class="form-control" id="password"
+                                           placeholder="Contraseña">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Entrar</button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                        </form>
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% else %}
+                        <div class="alert alert-danger text-center" role="alert">
+                            Ya tienes iniciada la sesión
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="contrasena" class="col-sm-2 control-label">Contraseña</label>
-                        <div class="col-sm-10">
-                            <input type="password" name="_password" class="form-control" id="password"
-                                   placeholder="Contraseña">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">Entrar</button>
-                        </div>
-                    </div>
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
-                </form>
-                {% if error %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
-                    </div>
-                {% endif %}
-            </div>
-            {% else %}
-                <div class="alert alert-danger text-center" role="alert">
-                    Ya tienes iniciada la sesión
+                    {% endif %}
                 </div>
-            {% endif %}
+            </div>
         </div>
-        <div class="text-center">
-            <p><strong>Username:</strong> admin</p>
-            <p><strong>Contraseña: </strong>password</p>
-            <p><strong>Documentacion en doxygen: </strong><a href="https://web-spa-doxygen.herokuapp.com/">VER</a> </p>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Usuario administrador</div>
+                    <div class="panel-body">
+                        <p><strong>Username:</strong> admin</p>
+                        <p><strong>Contraseña: </strong>password</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Datos del proyecto</div>
+                    <div class="panel-body">
+                        <p><strong>Framework utilizado:</strong> Symfony</p>
+                        <p><strong>Documentacion en doxygen: </strong><a href="https://web-spa-doxygen.herokuapp.com/">VER</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
