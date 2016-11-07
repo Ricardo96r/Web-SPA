@@ -21,15 +21,17 @@
             </div>
         </div>
         <div class="col-md-6 col-md-offset-3">
-            {% if is_granted('ROLE_ADMIN') %}
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <a href="{{ path('usuario_edit', {id: usuario.id}) }}">
-                        <div class="btn btn-primary btn-lg btn-block">Editar usuario
+            {% if app.user.activo %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <a href="{{ path('usuario_edit', {id: usuario.id}) }}">
+                                <div class="btn btn-primary btn-lg btn-block">Editar usuario
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-            </div>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>

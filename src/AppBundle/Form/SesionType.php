@@ -42,6 +42,7 @@ class SesionType extends AbstractType
                         return $er->createQueryBuilder('u')
                             ->where('u.roles = :roleManager')
                             ->orWhere('u.roles = :roleAdmin')
+                            ->andWhere('u.activo = true')
                             ->setParameter('roleManager', '["ROLE_MANAGER"]')
                             ->setParameter('roleAdmin', '["ROLE_ADMIN"]');
                     },

@@ -63,7 +63,6 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="telefono", type="string", length=45, nullable=false)
-     * @Assert\Regex(pattern="/\(?\+[0-9]{1,3}\)? ?-?[0-9]{1,3} ?-?[0-9]{3,5} ?-?[0-9]{4}( ?-?[0-9]{3})? ?(\w{1,10}\s?\d{1,6})?/", message="Número de telefono incorrecto. (Ejemplo +58 412 5556566)")
      */
     private $telefono;
 

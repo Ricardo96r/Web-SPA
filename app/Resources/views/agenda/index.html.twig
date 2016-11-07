@@ -16,7 +16,8 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <a href="{{ path('homepage') }}">
-                            <div class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-share"></span> Agendar una sesion
+                            <div class="btn btn-primary btn-lg btn-block"><span
+                                        class="glyphicon glyphicon-share"></span> Agendar una sesion
                             </div>
                         </a>
                     </div>
@@ -35,15 +36,22 @@
                                 {{ form_start(buscar_form) }}
                                 {{ form_widget(buscar_form) }}
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Filtrar</button>
+                                    <button type="submit" class="btn btn-default"><span
+                                                class="glyphicon glyphicon-search"></span> Filtrar
+                                    </button>
                                 </div>
                                 {{ form_end(buscar_form) }}
                             </div>
                         </div>
-                        <a href="{{ path('calendario_index') }}">
-                            <div class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-calendar"></span> Vista de calendario
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <a href="{{ path('calendario_index') }}">
+                                    <div class="btn btn-success btn-lg btn-block"><span
+                                                class="glyphicon glyphicon-calendar"></span> Vista de calendario
+                                    </div>
+                                </a>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,13 +67,14 @@
                         <th>Manager</th>
                         <th>Especialista</th>
                         {% if is_granted('ROLE_ADMIN') %}
-                        <th>Editar</th>
-                        <th>Eliminar</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
                         {% endif %}
                         </thead>
                         {% for agenda in agendas %}
                             <tr>
-                                <td class="text-center"><a href="{{ path('sesion_show', { id: agenda.sesion.id }) }}"><span
+                                <td class="text-center"><a
+                                            href="{{ path('sesion_show', { id: agenda.sesion.id }) }}"><span
                                                 class="glyphicon glyphicon-info-sign"
                                                 aria-hidden="true"></span></a></td>
                                 <td>{{ agenda.sesion.cliente.cedula }}
@@ -76,34 +85,39 @@
                                 <td>{{ agenda.especialista.username }}
                                     - {{ agenda.especialista.nombre }} {{ agenda.especialista.apellido }}</td>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                <td class="text-center"><a href="{{ path('agenda_edit', { id: agenda.sesion.id }) }}"><span
-                                                class="glyphicon glyphicon-edit"
-                                                aria-hidden="true"></span></a></td>
-                                <td class="text-center"><a href="" data-toggle="modal"
-                                                           data-target="#myModalAgenda{{ agenda.sesion.id }}"><span
-                                                class="glyphicon glyphicon-remove-circle"
-                                                aria-hidden="true"></span></a></td>
-                                <div class="modal fade" id="myModalAgenda{{ agenda.sesion.id }}" tabindex="-1" role="dialog"
-                                     aria-labelledby="myModalLabel{{ agenda.sesion.id }}">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close"><span
-                                                            aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title" id="myModalLabel">¿Seguro que quieres borrar la
-                                                    agenda?</h4>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                                </button>
-                                                <a href="{{ path('agenda_delete', {id: agenda.sesion.id}) }}">
-                                                    <button type="button" class="btn btn-danger">Borrar agenda</button>
-                                                </a>
+                                    <td class="text-center"><a
+                                                href="{{ path('agenda_edit', { id: agenda.sesion.id }) }}"><span
+                                                    class="glyphicon glyphicon-edit"
+                                                    aria-hidden="true"></span></a></td>
+                                    <td class="text-center"><a href="" data-toggle="modal"
+                                                               data-target="#myModalAgenda{{ agenda.sesion.id }}"><span
+                                                    class="glyphicon glyphicon-remove-circle"
+                                                    aria-hidden="true"></span></a></td>
+                                    <div class="modal fade" id="myModalAgenda{{ agenda.sesion.id }}" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="myModalLabel{{ agenda.sesion.id }}">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close"><span
+                                                                aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">¿Seguro que quieres borrar
+                                                        la
+                                                        agenda?</h4>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                    <a href="{{ path('agenda_delete', {id: agenda.sesion.id}) }}">
+                                                        <button type="button" class="btn btn-danger">Borrar agenda
+                                                        </button>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 {% endif %}
                             </tr>
                         {% endfor %}

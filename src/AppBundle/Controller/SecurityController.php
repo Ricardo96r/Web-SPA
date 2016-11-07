@@ -54,4 +54,17 @@ class SecurityController extends Controller
     {
         throw new \Exception('This should never be reached!');
     }
+
+    /**
+     * Muestra una vista de alerta de que el usuario no esta activo
+     * @return Response
+     *
+     * @cond
+     * @Route("/activo", name="activo_error")
+     * @endcond
+     */
+    public function activoAction()
+    {
+        return $this->render('activo.html.twig');
+    }
 }

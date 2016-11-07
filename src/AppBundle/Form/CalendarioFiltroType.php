@@ -40,7 +40,8 @@ class CalendarioFiltroType extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                         ->where('u.roles = :roleManager')
-                        ->setParameter('roleManager', '["ROLE_ESPECIALISTA"]');
+                        ->setParameter('roleManager', '["ROLE_ESPECIALISTA"]')
+                        ->andWhere('u.activo = true');
                 },
             ))
         ;

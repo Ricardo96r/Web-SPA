@@ -16,20 +16,22 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                {% if is_granted('ROLE_MANAGER') %}
-                    <li><a href="{{ path('homepage') }}">Sesiones</a></li>
-                    <li><a href="{{ path('agenda_index') }}">Agendas</a></li>
-                    <li><a href="{{ path('cliente_index') }}">Clientes</a></li>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li><a href="{{ path('usuario_index') }}">Usuarios</a></li>
+                {% if app.user.activo %}
+                    {% if is_granted('ROLE_MANAGER') %}
+                        <li><a href="{{ path('homepage') }}">Sesiones</a></li>
+                        <li><a href="{{ path('agenda_index') }}">Agendas</a></li>
+                        <li><a href="{{ path('cliente_index') }}">Clientes</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('usuario_index') }}">Usuarios</a></li>
+                        {% else %}
+                            <li><a href="{{ path('usuario_index') }}">Especialistas</a></li>
+                        {% endif %}
+                        <li><a href="{{ path('servicio_index') }}">Servicios</a></li>
+                        <li><a href="{{ path('equipo_index') }}">Equipos</a></li>
+                        <li><a href="{{ path('tipo_index') }}">Tipos de servicio</a></li>
                     {% else %}
-                        <li><a href="{{ path('usuario_index') }}">Especialistas</a></li>
+                        <li><a href="{{ path('calendario_index') }}">Agenda de trabajo</a></li>
                     {% endif %}
-                    <li><a href="{{ path('servicio_index') }}">Servicios</a></li>
-                    <li><a href="{{ path('equipo_index') }}">Equipos</a></li>
-                    <li><a href="{{ path('tipo_index') }}">Tipos de servicio</a></li>
-                {% else %}
-                    <li><a href="{{ path('calendario_index') }}">Agenda de trabajo</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
