@@ -1,12 +1,17 @@
-Symfony Demo Application
+Aplicación WEB-SPA
 ========================
 
-The "Symfony Demo Application" is a reference application created to show how
-to develop Symfony applications following the recommended best practices.
+Sistema de agendas/sesiones para un centro de cuidado estético. 
+Proyecto de ingeniería de software
 
-[![Build Status](https://travis-ci.org/symfony/symfony-demo.svg?branch=master)](https://travis-ci.org/symfony/symfony-demo)
+[Ver demo en heroku](https://web-spa.herokuapp.com/)       
 
-Requirements
+[Ver doxygen en heroku](http://web-spa-doxygen.herokuapp.com/)
+
+[Especificaciones detalladas del proyecto.pdf]().
+
+
+Requerimientos
 ------------
 
   * PHP 5.5.9 or higher;
@@ -17,42 +22,29 @@ If unsure about meeting these requirements, download the demo application and
 browse the `http://localhost:8000/config.php` script to get more detailed
 information.
 
-Installation
+Instalación
 ------------
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-First, install the [Symfony Installer](https://github.com/symfony/symfony-installer)
-if you haven't already. Then, install the Symfony Demo Application executing
-this command anywhere in your system:
+Para instalar Web-SPA sigue estos comandos.
 
 ```bash
-$ symfony demo
+$ git clone https://github.com/Ricardo96r/Web-SPA.git
+$ cd Web-SPA/
+$ composer install
 
-# if you're using Windows:
-$ php symfony demo
+  # Genera datos aleatorios con lógica para la base de datos:
+$ php bin/console doctrine:fixtures:load
 ```
 
-If the `demo` command is not available, update your Symfony Installer to the
-most recent version executing the `symfony self-update` command.
+En cuanto a la base de datos se utiliza SQL-Lite, por lo cual no requiere ninguna instalación o problemas de configuración
 
-> **NOTE**
->
-> If you can't use the Symfony Installer, download and install the demo
-> application using Git and Composer:
->
->     $ git clone https://github.com/symfony/symfony-demo
->     $ cd symfony-demo/
->     $ composer install --no-interaction
-
-Usage
+Usar
 -----
 
-There is no need to configure a virtual host in your web server to access the application.
-Just use the built-in web server:
+No es necesario tener un servidor web como apache/ngix para poder funcionar la aplicación. 
+Solo necesita de PHP
 
 ```bash
-$ cd symfony-demo/
+$ cd Web-SPA/
 $ php bin/console server:run
 ```
 
@@ -68,16 +60,18 @@ terminal.
 > For more details, see:
 > http://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html
 
-Troubleshooting
+Otro
 ---------------
-
-The current Symfony Demo application uses Symfony 3.x version. If you want to
-use the legacy Symfony 2.8 version, clone the Git repository and checkout the
-`v0.8.4` tag, which is the last one compatible with Symfony 2.8:
+Se puede crear la primera cuenta con el comando.
 
 ```bash
-$ git clone https://github.com/symfony/symfony-demo
-$ cd symfony-demo/
-$ git checkout tags/v0.8.4 -b v0.8.4
-$ composer install
+$ cd Web-SPA/
+$ php bin/console app:add-user
 ```
+
+> **NOTA**                                                                             
+>                                                                                      
+> Si usaste el generador de datos para la base de datos. 
+> Por default la cuenta administrador es:
+> usuario: admin,
+> contraseña: password
