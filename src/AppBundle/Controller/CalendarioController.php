@@ -47,6 +47,7 @@ class CalendarioController extends Controller
                 $repository = $this->getDoctrine()->getRepository('AppBundle:User');
                 $especialista = $repository->createQueryBuilder('u')
                     ->where('u.roles = :roleManager')
+                    ->andWhere('u.activo = true')
                     ->setParameter('roleManager', '["ROLE_ESPECIALISTA"]')
                     ->setMaxResults(1)->getQuery()->getOneOrNullResult();
                 $repository = $this->getDoctrine()->getRepository('AppBundle:Agenda');
