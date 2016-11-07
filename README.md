@@ -8,7 +8,7 @@ Proyecto de ingeniería de software
 
 [Ver doxygen en heroku](http://web-spa-doxygen.herokuapp.com/)
 
-[Especificaciones detalladas del proyecto.pdf]().
+[Especificaciones detalladas del proyecto.pdf](https://github.com/Ricardo96r/Web-SPA/blob/master/especificaciones.pdf).
 
 
 Requerimientos
