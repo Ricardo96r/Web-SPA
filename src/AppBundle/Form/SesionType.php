@@ -32,7 +32,8 @@ class SesionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if (in_array('ROLE_ADMIN', $options['role']) || ($options['tipo'] == 'crear')) {
-            $builder
+            /*
+             * $builder
                 ->add('manager', EntityType::class, array(
                     'class' => 'AppBundle:User',
                     'choice_label' => function ($cliente) {
@@ -47,6 +48,7 @@ class SesionType extends AbstractType
                             ->setParameter('roleAdmin', '["ROLE_ADMIN"]');
                     },
                 ));
+            */
             if ( ! $options['agenda']) {
                 $builder->add('servicio', EntityType::class, array(
                     'class' => 'AppBundle:Servicio',

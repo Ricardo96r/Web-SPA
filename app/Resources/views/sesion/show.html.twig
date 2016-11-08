@@ -235,7 +235,7 @@
                                 <strong>Activo:</strong> {% if (sesion.agenda.especialista.activo) %} si {% else %} no {% endif %}
                             </p>
                             <div class="form-group">
-                                <a href="{{ path('cliente_show', {id: sesion.agenda.especialista.id}) }}">
+                                <a href="{{ path('usuario_show', {id: sesion.agenda.especialista.id}) }}">
                                     <div class="btn btn-default btn-lg btn-block">Ver especialista</div>
                                 </a>
                             </div>

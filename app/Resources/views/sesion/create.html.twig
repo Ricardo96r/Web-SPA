@@ -6,6 +6,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Crear sesion</div>
                 <div class="panel-body">
+                    <label class="control-label">Manager</label>
+                    <div class="form-group disabled">
+                        <input type="text" class="form-control"
+                               value="{{ app.user.username }} - {{ app.user.nombre }} {{ app.user.apellido }}" disabled>
+                    </div>
                     {{ form_start(form) }}
                     {{ form_widget(form) }}
                     <div class="form-group">

@@ -86,6 +86,7 @@ class SesionController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $sesion->setManager($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($sesion);
             $entityManager->flush();
